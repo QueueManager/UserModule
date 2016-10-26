@@ -3,6 +3,9 @@
 ; 2. which registers will we use to save the queue?
 ; 3. add goSleep functionality (to save energy) and wakeUp when button is pressed
 ; 4. do we need a reset button?
+; 5. external communications:
+;   5.1 configure output when button is pressed (printer, etc)
+;   5.2 create function to receive request for next in queue from other modules
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
 ; PIC16F628A Configuration Bit Settings
@@ -14,9 +17,11 @@
  
 	ORG	0x0000
 iCount	EQU	d'241'
+mQueue	EQU	h'30'		    ;manager queue register
+cQueue	EQU	h'50'		    ;cashier queue register
 	
 	GOTO	setup				    
-	ORG	0x0004		    ; Interruption treatment 	
+	ORG	0x0004		    ;Interruption treatment 	
 	BTFSC	INTCON, RAIF	   
 	call	buttonInterrupt	    ;PORTA interrupt flag bit set
 	RETFIE			    ;Return from interrupt treatment 	    
@@ -25,27 +30,33 @@ iCount	EQU	d'241'
 buttonInterrupt:
 				    ;Checks which button was pressed 
 	BTFSS	PORTA, RA0	     
-	call	buttonra0	    ;RA0 pressed
+	call	managerNormalButton	    ;RA0 pressed
 	BTFSS	PORTA, RA1	    
-	call	buttonra1	    ;RA1 pressed
+	call	managerPriorityButton	    ;RA1 pressed
 	BTFSS	PORTA, RA2	    
-    	call	buttonra2	    ;RA2 pressed
+    	call	cashierNormalButton	    ;RA2 pressed
 	BTFSS	PORTA, RB3	
-	call	buttonra3	    ;RA3 pressed
+	call	cashierPriorityButton	    ;RA3 pressed
 
-buttonra0:
+;(Next 4 functions) Buttons pressed. Functions called locally
+managerNormalButton:
 	;TODO
 	RETURN	
-buttonra1:
+managerPriorityButton:
 	;TODO
 	RETURN
-buttonra2:
+cashierNormalButton:
 	;TODO
 	RETURN
-buttonra3:
+cashierPriorityButton:
 	;TODO
 	RETURN
-	
+
+; Called externally (read I/O pin). 
+getNextInLine:
+	;TODO 
+	RETURN
+
 setup:
 	;configure ports
 	BANKSEL	PORTA
@@ -55,7 +66,6 @@ setup:
 	BANKSEL	ANSEL		
 	CLRF	ANSEL		    
 	MOVLW	'00111111'	    ;RA<5:0> as inputs
-	
 	
 	BANKSEL	PORTA		    ;Interruption setup
 	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals and PORTA
