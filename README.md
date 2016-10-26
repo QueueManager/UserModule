@@ -1,5 +1,5 @@
 # User Module
-**You can find the documentation of this module in [here](https://github.com/QueueManager/AttendantModule.X/wiki).**
+**Head to our [wiki](https://github.com/QueueManager/AttendantModule.X/wiki) to look at the project's documentation.**
 
 This repository contains the final project of the _Microcontrollers and Applications_ (ECOM059 2016.1) class at [UFAL](http://www.ufal.edu.br).
 
