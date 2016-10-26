@@ -1,0 +1,51 @@
+MPLINK 5.08, LINKER
+Linker Map File - Created Wed Oct 26 17:31:16 2016
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000002
+                   .cinit    romdata   0x000001    program   0x000004
+                   .org_1       code   0x000004    program   0x000046
+.config_2007_BUILD/DEFAULT/PRODUCTION/MAIN.O       code   0x002007    program   0x000002
+.config_2008_BUILD/DEFAULT/PRODUCTION/MAIN.O       code   0x002008    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000002      
+                            0x000004    0x000026      
+                            0x002007    0x002008      
+            40 out of 4359 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+          buttonInterrupt   0x000007    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+      cashierNormalButton   0x000011    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+    cashierPriorityButton   0x000012    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+            getNextInLine   0x000013    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+                     loop   0x000025    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+      managerNormalButton   0x00000f    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+    managerPriorityButton   0x000010    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+                    setup   0x000014    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+          buttonInterrupt   0x000007    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+      managerNormalButton   0x00000f    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+    managerPriorityButton   0x000010    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+      cashierNormalButton   0x000011    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+    cashierPriorityButton   0x000012    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+            getNextInLine   0x000013    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+                    setup   0x000014    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+                     loop   0x000025    program     static /Users/yvesbastos/Dropbox/Academico/2016-1/ECOM059 - Microcontroladores/FinalProject-UserModule/UserModule-PIC.X/Main.asm
+
+

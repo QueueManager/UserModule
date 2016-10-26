@@ -3,7 +3,7 @@
 
 This repository contains the final project of the _Microcontrollers and Applications_ (ECOM059 2016.1) class at [UFAL](http://www.ufal.edu.br).
 
-**Programmed in** Assembly (PIC16F688)
+**Programmed in** Assembly (PIC16F883)
 
 **Teacher:** [Rodrigo Peixoto](https://www.github.com/rodrigopex)
 

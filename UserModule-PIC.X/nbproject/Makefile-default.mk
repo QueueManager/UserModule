@@ -83,8 +83,8 @@ ifneq ($(INFORMATION_MESSAGE), )
 endif
 	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/UserModule-PIC.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
-MP_PROCESSOR_OPTION=16f688
-MP_LINKER_DEBUG_OPTION=-r=ROM@0xF00:0xFFF -r=RAM@SHARE:0x70:0x70 -r=RAM@SHARE:0xF0:0xF0 -r=RAM@GPR:0x165:0x16F -r=RAM@SHARE:0x170:0x170 -r=RAM@SHARE:0x1F0:0x1F0
+MP_PROCESSOR_OPTION=16f883
+MP_LINKER_DEBUG_OPTION=-r=ROM@0xF00:0xFFE -r=RAM@SHARE:0x70:0x70 -r=RAM@SHARE:0xF0:0xF0 -r=RAM@GPR:0x165:0x16F -r=RAM@SHARE:0x170:0x170 -r=RAM@SHARE:0x1F0:0x1F0
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)

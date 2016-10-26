@@ -8,12 +8,15 @@
 ;   5.2 create function to receive request for next in queue from other modules
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
-; PIC16F628A Configuration Bit Settings
+; PIC16F883 Configuration Bit Settings
 ; ASM source line config statements
-#include "P16F688.inc"
-; CONFIG
-; __config 0xFF19
- __CONFIG _FOSC_INTOSCIO & _WDTE_OFF & _PWRTE_OFF & _MCLRE_OFF & _BOREN_OFF & _LVP_OFF & _CPD_OFF & _CP_OFF
+#include "p16F883.inc"
+; CONFIG1
+; __config 0xFFFC
+__CONFIG _CONFIG1, _FOSC_INTRC_NOCLKOUT & _WDTE_ON & _PWRTE_OFF & _MCLRE_ON & _CP_OFF & _CPD_OFF & _BOREN_ON & _IESO_ON & _FCMEN_ON & _LVP_ON
+; CONFIG2
+; __config 0xFFFF
+ __CONFIG _CONFIG2, _BOR4V_BOR40V & _WRT_OFF
  
 	ORG	0x0000
 iCount	EQU	d'241'
@@ -22,21 +25,21 @@ cQueue	EQU	h'50'		    ;cashier queue register
 	
 	GOTO	setup				    
 	ORG	0x0004		    ;Interruption treatment 	
-	BTFSC	INTCON, RAIF	   
+	BTFSC	INTCON, RBIF	   
 	call	buttonInterrupt	    ;PORTA interrupt flag bit set
 	RETFIE			    ;Return from interrupt treatment 	    
 
 	
 buttonInterrupt:
 				    ;Checks which button was pressed 
-	BTFSS	PORTA, RA0	     
-	call	managerNormalButton	    ;RA0 pressed
-	BTFSS	PORTA, RA1	    
-	call	managerPriorityButton	    ;RA1 pressed
-	BTFSS	PORTA, RA2	    
-    	call	cashierNormalButton	    ;RA2 pressed
-	BTFSS	PORTA, RB3	
-	call	cashierPriorityButton	    ;RA3 pressed
+	BTFSS	PORTB, RB0	     
+	call	managerNormalButton	    ;RB0 pressed
+	BTFSS	PORTB, RB1	    
+	call	managerPriorityButton	    ;RB1 pressed
+	BTFSS	PORTB, RB2	    
+    	call	cashierNormalButton	    ;RB2 pressed
+	BTFSS	PORTB, RB3	
+	call	cashierPriorityButton	    ;RB3 pressed
 
 ;(Next 4 functions) Buttons pressed. Functions called locally
 managerNormalButton:
@@ -61,11 +64,15 @@ setup:
 	;configure ports
 	BANKSEL	PORTA
 	CLRF	PORTA
-	MOVLW	'00000000'	    ;all pins set to digital I/O...
-	MOVWF	CMCON0		    ;so there will be no conflict
 	BANKSEL	ANSEL		
-	CLRF	ANSEL		    
-	MOVLW	'00111111'	    ;RA<5:0> as inputs
+	CLRF	ANSEL		    ;digital i/o
+	
+	BANKSEL PORTB
+	CLRF PORTB
+	BANKSEL TRISB
+	MOVLW b'00001111'	    ;Set RB<3:0> as inputs, RB<7:4> as outputs 
+	MOVWF TRISB ;
+	
 	
 	BANKSEL	PORTA		    ;Interruption setup
 	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals and PORTA
