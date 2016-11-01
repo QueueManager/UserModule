@@ -1,12 +1,12 @@
 MPLINK 5.08, LINKER
-Linker Map File - Created Mon Oct 31 22:00:24 2016
+Linker Map File - Created Tue Nov  1 00:16:51 2016
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
                 ---------  ---------  ---------  ---------  ---------
                    .org_0       code   0x000000    program   0x000002
                    .cinit    romdata   0x000001    program   0x000004
-                   .org_1       code   0x000004    program   0x000158
+                   .org_1       code   0x000004    program   0x00017a
 .config_2007_BUILD/DEFAULT/PRODUCTION/MAIN.O       code   0x002007    program   0x000002
 .config_2008_BUILD/DEFAULT/PRODUCTION/MAIN.O       code   0x002008    program   0x000002
 
@@ -16,9 +16,9 @@ Linker Map File - Created Mon Oct 31 22:00:24 2016
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000002      
-                            0x000004    0x0000af      
+                            0x000004    0x0000c0      
                             0x002007    0x002008      
-            177 out of 4359 program addresses used, program memory utilization is 4%
+            194 out of 4359 program addresses used, program memory utilization is 4%
 
 
 
@@ -31,19 +31,19 @@ Linker Map File - Created Mon Oct 31 22:00:24 2016
              _.org_1_006B   0x00006b    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
                  buildMax   0x000080    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
           buttonInterrupt   0x000090    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-      cashierNormalButton   0x00009a    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-    cashierPriorityButton   0x00009b    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+      cashierNormalButton   0x0000a9    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+    cashierPriorityButton   0x0000aa    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
                 endheapfy   0x00006d    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
                  endright   0x000065    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-            getNextInLine   0x00009c    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+            getNextInLine   0x0000ab    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
                   heapify   0x000020    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
               heapifyloop   0x00008a    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
               largestLeft   0x00006e    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
              largestRight   0x000077    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-                     loop   0x0000ae    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+                     loop   0x0000bf    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
       managerNormalButton   0x000098    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-    managerPriorityButton   0x000099    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-                    setup   0x00009d    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+    managerPriorityButton   0x0000a8    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+                    setup   0x0000ac    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
                      swap   0x000007    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
 
 
@@ -65,11 +65,11 @@ Linker Map File - Created Mon Oct 31 22:00:24 2016
               heapifyloop   0x00008a    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
           buttonInterrupt   0x000090    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
       managerNormalButton   0x000098    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-    managerPriorityButton   0x000099    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-      cashierNormalButton   0x00009a    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-    cashierPriorityButton   0x00009b    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-            getNextInLine   0x00009c    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-                    setup   0x00009d    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
-                     loop   0x0000ae    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+    managerPriorityButton   0x0000a8    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+      cashierNormalButton   0x0000a9    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+    cashierPriorityButton   0x0000aa    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+            getNextInLine   0x0000ab    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+                    setup   0x0000ac    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
+                     loop   0x0000bf    program     static /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-PIC.X/Main.asm
 
 

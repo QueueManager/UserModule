@@ -31,7 +31,7 @@ cQueue	EQU	h'50'		    ;cashier queue register
 
 	    cblock  0x20
 	    size, count, index, test, largest, parent, child, aux, largestValue, exit, swap1, swap2, countheap,
-	    ss
+	    ss, mIndex
 	    endc
 	    
 ;IND2POS: Converte o indice para a o endereco de memoria
@@ -217,7 +217,22 @@ buttonInterrupt:
 
 ;(Next 4 functions) Buttons pressed. Functions called locally
 managerNormalButton:
-	;TODO
+	INCF	size
+	MOVF    size, W
+	MOVWF   index
+
+	INCF	iCount
+	INCF	mIndex
+	
+	IND2POS	mIndex
+	MOVF	iCount, W		
+	MOVWF	INDF
+		
+	BCF     STATUS, C
+	RRF     index
+	INCF    index	;incrementa pq o loop do build Max Heap ja
+	CALL    buildMax
+	;TODO: ajeitar o índice onde comeca a fila
 	RETURN	
 managerPriorityButton:
 	;TODO
@@ -242,10 +257,13 @@ setup:
 	CLRF	ANSEL		    ;digital i/o
 	
 	BANKSEL PORTB
-	CLRF PORTB
-	BANKSEL TRISB
-	MOVLW b'00001111'	    ;Set RB<3:0> as inputs, RB<7:4> as outputs 
-	MOVWF TRISB ;
+	CLRF	PORTB
+	BANKSEL	TRISB
+	MOVLW	b'00001111'	    ;Set RB<3:0> as inputs, RB<7:4> as outputs 
+	MOVWF	TRISB ;
+	
+	MOVLW	d'0'
+	MOVWF	iCount
 	
 	
 	BANKSEL	PORTA		    ;Interruption setup
