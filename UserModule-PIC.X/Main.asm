@@ -43,13 +43,13 @@ clearMqueue:
 	
 buttonInterrupt:
 				    ;Checks which button was pressed 
-	BTFSS	PORTB, RB0	     
+	BTFSS	PORTB, RB7	     
 	call	managerNormalButton	    ;RB0 pressed
-	BTFSS	PORTB, RB1	    
+	BTFSS	PORTB, RB6	    
 	call	managerPriorityButton	    ;RB1 pressed
-	BTFSS	PORTB, RB2	    
+	BTFSS	PORTB, RB5	    
     	call	cashierNormalButton	    ;RB2 pressed
-	BTFSS	PORTB, RB3	
+	BTFSS	PORTB, RB4	
 	call	cashierPriorityButton	    ;RB3 pressed
 
 ;(Next 4 functions) Buttons pressed. Functions called locally
@@ -92,7 +92,7 @@ setup:
 	BANKSEL PORTB
 	CLRF	PORTB
 	BANKSEL	TRISB
-	MOVLW	b'00001111'	    ;Set RB<3:0> as inputs, RB<7:4> as outputs 
+	MOVLW	b'11110000'	    ;Set RB<3:0> as inputs, RB<7:4> as outputs 
 	MOVWF	TRISB ;
 	
 	
