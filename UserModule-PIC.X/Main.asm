@@ -33,8 +33,11 @@ cQueue	EQU	h'50'		    ;cashier queue register
 
 	    cblock  0x20
 	    mCount, cCount, mCountPri, cCountPri, mBegin, cBegin,
-	    mBeginPri, cBeginPri
+	    mBeginPri, cBeginPri, nextm, nextpm, nextc,
+	    nextpc
 	    endc
+	    
+
 clearMqueue:
 	MOVLW	0x00
 	MOVWF	mCount
@@ -77,6 +80,10 @@ buttonInterrupt:
 
 ;(Next 4 functions) Buttons pressed. Functions called locally
 managerNormalButton:
+	MOVLW	0x2A
+	SUBWF	nextm, W
+	BTFSC	STATUS, Z
+	RETURN
 	
 	MOVLW	0x1E
 	SUBWF	mCount, W
@@ -91,6 +98,11 @@ managerNormalButton:
 	RETURN	
 
 managerPriorityButton:
+	MOVLW	0x5A
+	SUBWF	nextpm, W
+	BTFSC	STATUS, Z
+	RETURN
+	
 	MOVLW	0xC
 	SUBWF	mCountPri, W
 	BTFSC	STATUS, Z
@@ -104,6 +116,11 @@ managerPriorityButton:
 	RETURN
 	
 cashierNormalButton:
+	MOVLW	0x66
+	SUBWF	nextc, W
+	BTFSC	STATUS, Z
+	RETURN
+	
 	MOVLW	0x1E
 	SUBWF	cCount, W
 	BTFSC	STATUS, Z
@@ -115,7 +132,13 @@ cashierNormalButton:
 	MOVF	cCount, W
 	MOVWF	INDF
 	RETURN
+	
 cashierPriorityButton:
+	MOVLW	0x84
+	SUBWF	nextpc, W
+	BTFSC	STATUS, Z
+	RETURN
+	
 	MOVLW	0xC
 	SUBWF	cCountPri, W
 	BTFSC	STATUS, Z
@@ -155,12 +178,12 @@ setup:
 	BANKSEL	PORTA		    ;Interruption setup
 	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals and PORTA
 	MOVWF	INTCON
-	BANKSEL	IOCB
+	BANKSEL	IOCB		    ;Interruption setup
 	MOVLW	b'00001111'	    ;enable global interruptions, pheriperals and PORTA
 	MOVWF	IOCB
 	
 	
-	BANKSEL	PORTA		    ;Interruption setup
+	BANKSEL	PORTA		    
 	
 	MOVLW	0x2A
 	MOVWF	mBegin
@@ -177,7 +200,5 @@ setup:
 	
 loop:	
 	NOP
-	;CALL	managerNormalButton
-	
 	GOTO	loop	
 	END
