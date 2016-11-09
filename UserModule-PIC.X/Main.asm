@@ -21,8 +21,7 @@ __CONFIG _CONFIG1, _FOSC_INTRC_NOCLKOUT & _WDTE_ON & _PWRTE_OFF & _MCLRE_ON & _C
  
 	ORG	0x0000
 iCount	EQU	d'241'
-mQueue	EQU	h'40'		    ;manager queue register
-cQueue	EQU	h'50'		    ;cashier queue register
+
 	
 	GOTO	setup				    
 	ORG	0x0004		    ;Interruption treatment 	
@@ -32,37 +31,59 @@ cQueue	EQU	h'50'		    ;cashier queue register
 	RETFIE			    ;Return from interrupt treatment 	    
 
 	    cblock  0x20
-	    mCount, cCount, mCountPri, cCountPri, mBegin, cBegin,
-	    mBeginPri, cBeginPri, nextm, nextpm, nextc,
-	    nextpc
+	    mCount, pmCount, mlast,
+	    pmlast, mnext, pmnext, msize, pmsize
 	    endc
 	    
+	    cblock  0x120
+	    cCount, pcCount, clast, pclast, cnext,
+	    pcnext, csize, pcsize
+	    endc
+getFirstM:
+	BANKSEL	PORTA		    
+	RETURN
+
+getFirstC:
+	BANKSEL	WDTCON
+	RETURN
+
+getFirstPM:
+	BANKSEL	PORTA
+	RETURN
+
+getFirstPC:
+	BANKSEL	WDTCON
+	RETURN
 
 clearMqueue:
+	BANKSEL	PORTA
 	MOVLW	0x00
 	MOVWF	mCount
-	MOVLW	0x2A
-	MOVWF	mBegin
+	MOVLW	0x29
+	MOVWF	mlast
 	RETURN	
 	
-clearMPqueue:
+clearPMqueue:
+	BANKSEL	PORTA
 	MOVLW	0x00
-	MOVWF	mCountPri
-	MOVLW	0x5A
-	MOVWF	mBeginPri
+	MOVWF	pmCount
+	MOVLW	0x55
+	MOVWF	pmlast
 	RETURN
 clearCqueue:
+	BANKSEL	WDTCON
 	MOVLW	0x00
 	MOVWF	cCount
-	MOVLW	0x66
-	MOVWF	cBegin
+	MOVLW	0x129
+	MOVWF	clast
 	RETURN
 	
-clearCPqueue:
+clearPCqueue:
+	BANKSEL	WDTCON
 	MOVLW	0x00
-	MOVWF	cCountPri
-	MOVLW	0x84
-	MOVWF	cBeginPri
+	MOVWF	pcCount
+	MOVLW	0x14D
+	MOVWF	pclast
 	RETURN
 	
 buttonInterrupt:
@@ -75,80 +96,104 @@ buttonInterrupt:
     	call	cashierNormalButton	    ;RB2 pressed
 	BTFSC	PORTB, RB3	
 	call	cashierPriorityButton	    ;RB3 pressed
-	
+	BANKSEL	PORTA
 	RETURN
 
 ;(Next 4 functions) Buttons pressed. Functions called locally
 managerNormalButton:
-	MOVLW	0x2A
-	SUBWF	nextm, W
+	BANKSEL	PORTA
+	;se a fila esta cheia, entao nao adicione mais ninguem
+	MOVLW	0x2B
+	SUBWF	msize, W
 	BTFSC	STATUS, Z
 	RETURN
 	
-	MOVLW	0x1E
+	;testando se esta no final da memoria
+	MOVLW	0x2B
 	SUBWF	mCount, W
 	BTFSC	STATUS, Z
 	CALL	clearMqueue
 	
+	INCF	msize
 	INCF	mCount
-	MOVF	mBegin, W
+	
+	MOVF	mlast, W
 	MOVWF	FSR
 	MOVF	mCount, W
 	MOVWF	INDF
+	INCF	mlast
 	RETURN	
 
 managerPriorityButton:
-	MOVLW	0x5A
-	SUBWF	nextpm, W
+	BANKSEL	PORTA
+	;se a fila esta cheia, entao nao adicione mais ninguem
+	MOVLW	0x2B
+	SUBWF	pmsize, W
 	BTFSC	STATUS, Z
 	RETURN
 	
-	MOVLW	0xC
-	SUBWF	mCountPri, W
+	;testando se esta no final da memoria
+	MOVLW	0x2B
+	SUBWF	pmCount, W
 	BTFSC	STATUS, Z
-	CALL	clearMPqueue
+	CALL	clearPMqueue
 	
-	INCF	mCountPri
-	MOVF	mBeginPri, W
+	INCF	pmsize
+	INCF	pmCount
+	
+	MOVF	pmlast, W
 	MOVWF	FSR
-	MOVF	mCountPri, W
+	MOVF	pmCount, W
 	MOVWF	INDF
-	RETURN
+	INCF	pmlast
+	RETURN	
 	
 cashierNormalButton:
-	MOVLW	0x66
-	SUBWF	nextc, W
+	BANKSEL	WDTCON
+	;se a fila esta cheia, entao nao adicione mais ninguem
+	MOVLW	0x23
+	SUBWF	csize, W
 	BTFSC	STATUS, Z
 	RETURN
 	
-	MOVLW	0x1E
+	;testando se esta no final da memoria
+	MOVLW	0x23
 	SUBWF	cCount, W
 	BTFSC	STATUS, Z
 	CALL	clearCqueue
 	
+	INCF	csize
 	INCF	cCount
-	MOVF	cBegin, W
+	
+	MOVF	clast, W
 	MOVWF	FSR
 	MOVF	cCount, W
 	MOVWF	INDF
-	RETURN
+	INCF	clast
+	RETURN	
 	
 cashierPriorityButton:
-	MOVLW	0x84
-	SUBWF	nextpc, W
+	BANKSEL	WDTCON
+	;se a fila esta cheia, entao nao adicione mais ninguem
+	MOVLW	0x23
+	SUBWF	pcsize, W
 	BTFSC	STATUS, Z
 	RETURN
 	
-	MOVLW	0xC
-	SUBWF	cCountPri, W
+	;testando se esta no final da memoria
+	MOVLW	0x23
+	SUBWF	pcCount, W
 	BTFSC	STATUS, Z
-	CALL	clearCPqueue
+	CALL	clearPCqueue
 	
-	INCF	cCountPri
-	MOVF	cBeginPri, W
+	INCF	pcsize
+	INCF	pcCount
+	
+	MOVF	pclast, W
 	MOVWF	FSR
-	MOVF	cCountPri, W
+	MOVF	pcCount, W
 	MOVWF	INDF
+	INCF	pclast
 	RETURN
 
 ; Called externally (read I/O pin). 
@@ -185,17 +230,18 @@ setup:
 	
 	BANKSEL	PORTA		    
 	
-	MOVLW	0x2A
-	MOVWF	mBegin
+	MOVLW	0x29
+	MOVWF	mlast
 	
-	MOVLW	0x5A
-	MOVWF	cBegin
+	MOVLW	0x55
+	MOVWF	pmlast
 	
-	MOVLW	0x66
-	MOVWF	mBeginPri
+	BANKSEL	WDTCON
+	MOVLW	0x129
+	MOVWF	clast
 	
-	MOVLW	0x84
-	MOVWF	cBeginPri
+	MOVLW	0x14D
+	MOVWF	pclast
 	
 	
 loop:	
