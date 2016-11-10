@@ -35,7 +35,7 @@ iCount	EQU	d'241'
 	    pmlast, mnext, pmnext, msize, pmsize
 	    endc
 	    
-	    cblock  0x120
+	    cblock  0xA0
 	    cCount, pcCount, clast, pclast, cnext,
 	    pcnext, csize, pcsize
 	    endc
@@ -44,7 +44,7 @@ getFirstM:
 	RETURN
 
 getFirstC:
-	BANKSEL	WDTCON
+	BANKSEL	ADCON1
 	RETURN
 
 getFirstPM:
@@ -52,7 +52,7 @@ getFirstPM:
 	RETURN
 
 getFirstPC:
-	BANKSEL	WDTCON
+	BANKSEL	ADCON1
 	RETURN
 
 clearMqueue:
@@ -71,32 +71,32 @@ clearPMqueue:
 	MOVWF	pmlast
 	RETURN
 clearCqueue:
-	BANKSEL	WDTCON
+	BANKSEL	ADCON1
 	MOVLW	0x00
 	MOVWF	cCount
-	MOVLW	0x129
+	MOVLW	0xA9
 	MOVWF	clast
 	RETURN
 	
 clearPCqueue:
-	BANKSEL	WDTCON
+	BANKSEL	ADCON1
 	MOVLW	0x00
 	MOVWF	pcCount
-	MOVLW	0x14D
+	MOVLW	0xCC
 	MOVWF	pclast
 	RETURN
 	
 buttonInterrupt:
 				    ;Checks which button was pressed 
-	BTFSC	PORTB, RB0	     
+	BTFSC	PORTB, RB1	     
 	call	managerNormalButton	    ;RB0 pressed
-	BTFSC	PORTB, RB1	    
+	BTFSC	PORTB, RB0	    
 	call	managerPriorityButton	    ;RB1 pressed
 	BTFSC	PORTB, RB2	    
     	call	cashierNormalButton	    ;RB2 pressed
 	BTFSC	PORTB, RB3	
 	call	cashierPriorityButton	    ;RB3 pressed
-	BANKSEL	PORTA
+    	BANKSEL	PORTA
 	RETURN
 
 ;(Next 4 functions) Buttons pressed. Functions called locally
@@ -149,7 +149,7 @@ managerPriorityButton:
 	RETURN	
 	
 cashierNormalButton:
-	BANKSEL	WDTCON
+	BANKSEL	ADCON1
 	;se a fila esta cheia, entao nao adicione mais ninguem
 	MOVLW	0x23
 	SUBWF	csize, W
@@ -173,7 +173,7 @@ cashierNormalButton:
 	RETURN	
 	
 cashierPriorityButton:
-	BANKSEL	WDTCON
+	BANKSEL	ADCON1
 	;se a fila esta cheia, entao nao adicione mais ninguem
 	MOVLW	0x23
 	SUBWF	pcsize, W
@@ -223,8 +223,8 @@ setup:
 	BANKSEL	PORTA		    ;Interruption setup
 	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals and PORTA
 	MOVWF	INTCON
-	BANKSEL	IOCB		    ;Interruption setup
-	MOVLW	b'00001111'	    ;enable global interruptions, pheriperals and PORTA
+	BANKSEL	IOCB		    ;setup
+	MOVLW	b'00001111'	    
 	MOVWF	IOCB
 	
 	
@@ -236,11 +236,11 @@ setup:
 	MOVLW	0x55
 	MOVWF	pmlast
 	
-	BANKSEL	WDTCON
-	MOVLW	0x129
+	BANKSEL	ADCON1
+	MOVLW	0xA9
 	MOVWF	clast
 	
-	MOVLW	0x14D
+	MOVLW	0xCC
 	MOVWF	pclast
 	
 	
