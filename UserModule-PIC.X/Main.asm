@@ -41,7 +41,7 @@ iCount	EQU	d'241'
 	    endc
 getFirstM:
 	MOVF	mnext, W
-	MOVWF	TXREG
+	MOVWF	TXREG	;ajeitar pra mandar de verdade
 	
 	MOVF	mnext, W
 	MOVWF	FSR
@@ -55,7 +55,7 @@ getFirstM:
 
 getFirstC:
 	MOVF	cnext, W
-	MOVWF	TXREG
+	MOVWF	TXREG	;ajeitar pra mandar de verdade
 	
 	MOVF	cnext, W
 	MOVWF	FSR
@@ -69,7 +69,7 @@ getFirstC:
 
 getFirstPM:
 	MOVF	pmnext, W
-	MOVWF	TXREG
+	MOVWF	TXREG	;ajeitar pra mandar de verdade
 	
 	MOVF	pmnext, W
 	MOVWF	FSR
@@ -83,7 +83,7 @@ getFirstPM:
 
 getFirstPC:
 	MOVF	pcnext, W
-	MOVWF	TXREG
+	MOVWF	TXREG	;ajeitar pra mandar de verdade
 	
 	MOVF	pcnext, W
 	MOVWF	FSR
@@ -101,17 +101,17 @@ resetMcount:
 	RETURN
 	
 resetPMcount:
-	MOVLW   0x00
+	MOVLW   0x3E8
 	MOVWF	pmCount
 	RETURN
 	
 resetCcount:
-	MOVLW   0x00
+	MOVLW   0x7D0
 	MOVWF	cCount
 	RETURN
 	
 resetPCcount:
-	MOVLW   0x00
+	MOVLW   0xBB8
 	MOVWF	pcCount
 	RETURN
 	
@@ -191,8 +191,8 @@ managerPriorityButton:
 	BTFSC	STATUS, Z
 	CALL	clearPMqueue
 	
-	;reset if counter is equals to 999
-	MOVLW	0x3E7
+	;reset if counter is equals to 1999
+	MOVLW	0x7CF
 	SUBWF	pmCount, W
 	BTFSC	STATUS, Z
 	CALL	resetPMcount
@@ -221,8 +221,8 @@ cashierNormalButton:
 	BTFSC	STATUS, Z
 	CALL	clearCqueue
 	
-	;reset if counter is equals to 999
-	MOVLW	0x3E7
+	;reset if counter is equals to 1999
+	MOVLW	0xBB7
 	SUBWF	cCount, W
 	BTFSC	STATUS, Z
 	CALL	resetMcount
@@ -251,8 +251,8 @@ cashierPriorityButton:
 	BTFSC	STATUS, Z
 	CALL	clearPCqueue
 	
-	;reset if counter is equals to 999
-	MOVLW	0x3E7
+	;reset if counter is equals to 1999
+	MOVLW	0x79F
 	SUBWF	pcCount, W
 	BTFSC	STATUS, Z
 	CALL	resetMcount
@@ -269,7 +269,11 @@ cashierPriorityButton:
 
 ; Called externally (read I/O pin). 
 getNextInLine:
-	;TODO 
+	;TODO: essa funcao deve ficar checando se houve um pedido de fila
+	
+	;TODO: deve identificar qual guiche solicitou
+	
+	
 	RETURN
 
 setup:
@@ -319,6 +323,12 @@ setup:
 	MOVLW	0x29
 	MOVWF	pmnext
 	
+	MOVLW	0x00
+	MOVWF	mCount
+	
+	MOVLW	0x3E8
+	MOVWF	pmCount
+	
 	BANKSEL	ADCON1
 	
 	MOVLW	0xA9
@@ -338,6 +348,12 @@ setup:
 	
 	MOVLW	0x29
 	MOVWF	pcnext
+	
+	MOVLW	0x7D0
+	MOVWF	cCount
+	
+	MOVLW	0xBB8
+	MOVWF	pcCount
 	
 	
 loop:	
