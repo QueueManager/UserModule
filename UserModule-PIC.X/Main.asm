@@ -26,7 +26,7 @@ iCount	EQU	d'241'
 	GOTO	setup				    
 	ORG	0x0004		    ;Interruption treatment 	
 	BTFSC	INTCON, RBIF	   
-	call	buttonInterrupt	    ;PORTA interrupt flag bit set
+	call	buttonInterrupt	    ;PORTB interrupt flag bit set
 	BCF	INTCON, RBIF
 	RETFIE			    ;Return from interrupt treatment 	    
 
@@ -87,21 +87,20 @@ clearPCqueue:
 	RETURN
 	
 buttonInterrupt:
-				    ;Checks which button was pressed 
-	BTFSC	PORTB, RB1	     
-	call	managerNormalButton	    ;RB0 pressed
-	BTFSC	PORTB, RB0	    
-	call	managerPriorityButton	    ;RB1 pressed
-	BTFSC	PORTB, RB2	    
-    	call	cashierNormalButton	    ;RB2 pressed
-	BTFSC	PORTB, RB3	
-	call	cashierPriorityButton	    ;RB3 pressed
+	BANKSEL	PORTB			    ;Checks which button was pressed 
+	BTFSC	PORTB, RB4	     
+	call	managerNormalButton	    ;RB4 pressed
+	BTFSC	PORTB, RB5	    
+	call	managerPriorityButton	    ;RB5 pressed
+	BTFSC	PORTB, RB6	    
+    	call	cashierNormalButton	    ;RB6 pressed
+	BTFSC	PORTB, RB7	
+	call	cashierPriorityButton	    ;RB7 pressed
     	BANKSEL	PORTA
 	RETURN
 
 ;(Next 4 functions) Buttons pressed. Functions called locally
 managerNormalButton:
-	BANKSEL	PORTA
 	;se a fila esta cheia, entao nao adicione mais ninguem
 	MOVLW	0x2B
 	SUBWF	msize, W
@@ -125,7 +124,6 @@ managerNormalButton:
 	RETURN	
 
 managerPriorityButton:
-	BANKSEL	PORTA
 	;se a fila esta cheia, entao nao adicione mais ninguem
 	MOVLW	0x2B
 	SUBWF	pmsize, W
@@ -211,7 +209,7 @@ setup:
 	BANKSEL PORTB
 	CLRF	PORTB
 	BANKSEL	TRISB
-	MOVLW	b'00001111'	    ;Set RB<3:0> as inputs, RB<7:4> as outputs 
+	MOVLW	b'11110000'	    ;Set RB<7:4> as inputs, RB<3:0> as outputs 
 	MOVWF	TRISB ;
 	
 	
@@ -221,10 +219,10 @@ setup:
 	
 	
 	BANKSEL	PORTA		    ;Interruption setup
-	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals and PORTA
+	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals
 	MOVWF	INTCON
 	BANKSEL	IOCB		    ;setup
-	MOVLW	b'00001111'	    
+	MOVLW	b'11110000'	    ;enable interrupt-on-change for pins 4-7	    
 	MOVWF	IOCB
 	
 	
