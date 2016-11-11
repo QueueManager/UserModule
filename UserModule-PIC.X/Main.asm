@@ -40,48 +40,96 @@ iCount	EQU	d'241'
 	    pcnext, csize, pcsize
 	    endc
 getFirstM:
-	BANKSEL	PORTA		    
+	MOVF	mnext, W
+	MOVWF	TXREG
+	
+	MOVF	mnext, W
+	MOVWF	FSR
+	MOVLW	0x00
+	MOVWF	INDF
+	
+	INCF	mnext
+	DECF	msize
+	
 	RETURN
 
 getFirstC:
-	BANKSEL	ADCON1
+	MOVF	cnext, W
+	MOVWF	TXREG
+	
+	MOVF	cnext, W
+	MOVWF	FSR
+	MOVLW	0x00
+	MOVWF	INDF
+	
+	INCF	cnext
+	DECF	csize
+	
 	RETURN
 
 getFirstPM:
-	BANKSEL	PORTA
+	MOVF	pmnext, W
+	MOVWF	TXREG
+	
+	MOVF	pmnext, W
+	MOVWF	FSR
+	MOVLW	0x00
+	MOVWF	INDF
+	
+	INCF	pmnext
+	DECF	pmsize
+	
 	RETURN
 
 getFirstPC:
-	BANKSEL	ADCON1
-	RETURN
-
-clearMqueue:
-	BANKSEL	PORTA
+	MOVF	pcnext, W
+	MOVWF	TXREG
+	
+	MOVF	pcnext, W
+	MOVWF	FSR
 	MOVLW	0x00
+	MOVWF	INDF
+	
+	INCF	pcnext
+	DECF	pcsize
+	
+	RETURN
+	
+resetMcount:
+	MOVLW   0x00
 	MOVWF	mCount
+	RETURN
+	
+resetPMcount:
+	MOVLW   0x00
+	MOVWF	pmCount
+	RETURN
+	
+resetCcount:
+	MOVLW   0x00
+	MOVWF	cCount
+	RETURN
+	
+resetPCcount:
+	MOVLW   0x00
+	MOVWF	pcCount
+	RETURN
+	
+clearMqueue:
 	MOVLW	0x29
 	MOVWF	mlast
 	RETURN	
 	
 clearPMqueue:
-	BANKSEL	PORTA
-	MOVLW	0x00
-	MOVWF	pmCount
 	MOVLW	0x55
 	MOVWF	pmlast
 	RETURN
 clearCqueue:
-	BANKSEL	ADCON1
-	MOVLW	0x00
-	MOVWF	cCount
 	MOVLW	0xA9
 	MOVWF	clast
 	RETURN
 	
 clearPCqueue:
-	BANKSEL	ADCON1
-	MOVLW	0x00
-	MOVWF	pcCount
 	MOVLW	0xCC
 	MOVWF	pclast
 	RETURN
@@ -108,10 +156,17 @@ managerNormalButton:
 	RETURN
 	
 	;testando se esta no final da memoria
-	MOVLW	0x2B
-	SUBWF	mCount, W
+	MOVLW	0x54
+	SUBWF	mlast, W
 	BTFSC	STATUS, Z
 	CALL	clearMqueue
+	
+	
+	;reset if counter is equals to 999
+	MOVLW	0x3E7
+	SUBWF	mCount, W
+	BTFSC	STATUS, Z
+	CALL	resetMcount
 	
 	INCF	msize
 	INCF	mCount
@@ -131,10 +186,16 @@ managerPriorityButton:
 	RETURN
 	
 	;testando se esta no final da memoria
-	MOVLW	0x2B
-	SUBWF	pmCount, W
+	MOVLW	0x7F
+	SUBWF	pmlast, W
 	BTFSC	STATUS, Z
 	CALL	clearPMqueue
+	
+	;reset if counter is equals to 999
+	MOVLW	0x3E7
+	SUBWF	pmCount, W
+	BTFSC	STATUS, Z
+	CALL	resetPMcount
 	
 	INCF	pmsize
 	INCF	pmCount
@@ -155,10 +216,16 @@ cashierNormalButton:
 	RETURN
 	
 	;testando se esta no final da memoria
-	MOVLW	0x23
-	SUBWF	cCount, W
+	MOVLW	0xCB
+	SUBWF	clast, W
 	BTFSC	STATUS, Z
 	CALL	clearCqueue
+	
+	;reset if counter is equals to 999
+	MOVLW	0x3E7
+	SUBWF	cCount, W
+	BTFSC	STATUS, Z
+	CALL	resetMcount
 	
 	INCF	csize
 	INCF	cCount
@@ -179,10 +246,16 @@ cashierPriorityButton:
 	RETURN
 	
 	;testando se esta no final da memoria
-	MOVLW	0x23
-	SUBWF	pcCount, W
+	MOVLW	0xEF
+	SUBWF	pclast, W
 	BTFSC	STATUS, Z
 	CALL	clearPCqueue
+	
+	;reset if counter is equals to 999
+	MOVLW	0x3E7
+	SUBWF	pcCount, W
+	BTFSC	STATUS, Z
+	CALL	resetMcount
 	
 	INCF	pcsize
 	INCF	pcCount
@@ -234,12 +307,37 @@ setup:
 	MOVLW	0x55
 	MOVWF	pmlast
 	
+	MOVLW	0x00
+	MOVWF	msize
+	
+	MOVLW	0x00
+	MOVWF	pmsize
+	
+	MOVLW	0x29
+	MOVWF	mnext
+	
+	MOVLW	0x29
+	MOVWF	pmnext
+	
 	BANKSEL	ADCON1
+	
 	MOVLW	0xA9
 	MOVWF	clast
 	
 	MOVLW	0xCC
 	MOVWF	pclast
+	
+	MOVLW	0x00
+	MOVWF	csize
+	
+	MOVLW	0x00
+	MOVWF	pcsize
+	
+	MOVLW	0x29
+	MOVWF	cnext
+	
+	MOVLW	0x29
+	MOVWF	pcnext
 	
 	
 loop:	
