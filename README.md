@@ -3,7 +3,7 @@ This repository contains the user module of the Queue Manager ECOM059 final proj
 
 ## Overview
 
-![](https://github.com/QueueManager/UserModule/blob/master/images/Box-2.png)
+![](https://github.com/QueueManager/UserModule/blob/Heap/images/Box-2.png)
 
 The User Module is responsible for reading button inputs, managing the queue and communicating with other modules (via I2C/WiFi). 
 A more in-depth view of this module can be found at our [wiki](https://github.com/QueueManager/UserModule/wiki).
