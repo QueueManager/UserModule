@@ -219,18 +219,26 @@ setup:
 	
 	
 	BANKSEL	PORTA		    ;Interruption setup
-	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals
+	MOVLW	b'11011000'	    ;enable global, pheriperals, INT and PORTB interrupts
 	MOVWF	INTCON
-	BANKSEL	IOCB		    ;setup
+	BANKSEL	IOCB		    
 	MOVLW	b'11110000'	    ;enable interrupt-on-change for pins 4-7	    
 	MOVWF	IOCB
 	
+	BANKSEL	PIE1
+	MOVLW	b'01110000'	    ;setup peripheral interrupt: EUSART transmit and receive
+	MOVWF	PIE1
+	BANKSEL	RCSTA		    ;enabling EUSART transmitter and receiver
+	MOVLW	b'10010000'	    
+	MOVWF	RCSTA
+	BANKSEL	TXSTA
+	MOVLW	b'00100000'	    ;bug: currently firing interrupts for no apparent reason
+	MOVWF	TXSTA		    
+	
 	
 	BANKSEL	PORTA		    
-	
 	MOVLW	0x29
 	MOVWF	mlast
-	
 	MOVLW	0x55
 	MOVWF	pmlast
 	
@@ -240,9 +248,13 @@ setup:
 	
 	MOVLW	0xCC
 	MOVWF	pclast
-	
+
+txTest:
+	;TO BE REMOVED
+	BANKSEL	TXREG
+	MOVLW	b'00000001'
+	MOVWF	TXREG
 	
 loop:	
-	NOP
 	GOTO	loop	
 	END
