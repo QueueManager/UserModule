@@ -275,6 +275,23 @@ getNextInLine:
 	
 	
 	RETURN
+	
+transmitData:
+	;TODO fetch data from Wreg, save to reg X
+	BANKSEL	TXSTA
+	MOVLW	b'00100100'	    ;enable EUSART transmitter circuitry, set EUSART for async op
+	MOVWF	TXSTA	
+	BANKSEL	RCSTA		    ;set TX/CK pin as output
+	MOVLW	b'10000000'	    
+	MOVWF	RCSTA
+	BANKSEL	PIE1
+	BSF	PIE1, TXIE	    ;EUSART transmit interrupt enable
+	BANKSEL	PIE1
+	BSF	PIE1, TXIE	    ;EUSART transmit interrupt enable
+	;TODO MOVF  X,TXREG
+	MOVLW	b'10101000'	    ;data to be transmitted
+	MOVWF	TXREG
+	RETURN
 
 setup:
 	;configure ports
@@ -301,6 +318,9 @@ setup:
 	BANKSEL	IOCB		    ;setup
 	MOVLW	b'11110000'	    ;enable interrupt-on-change for pins 4-7	    
 	MOVWF	IOCB
+	BANKSEL	PIE1
+	MOVLW	b'01100000'	    ;setup peripheral interrupt: 
+	MOVWF	PIE1
 	
 	
 	BANKSEL	PORTA		    
@@ -358,5 +378,6 @@ setup:
 	
 loop:	
 	NOP
+	call	transmitData
 	GOTO	loop	
 	END
