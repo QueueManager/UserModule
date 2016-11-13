@@ -293,6 +293,10 @@ transmitData:
 	MOVWF	TXREG
 	RETURN
 
+receiveData:
+	
+	RETURN
+	
 setup:
 	;configure ports
 	BANKSEL	PORTA
@@ -306,7 +310,7 @@ setup:
 	MOVLW	b'11110000'	    ;Set RB<7:4> as inputs, RB<3:0> as outputs 
 	MOVWF	TRISB ;
 	
-	
+		
 	
 	;MOVLW	d'0'
 	;MOVWF	iCount
@@ -322,6 +326,14 @@ setup:
 	MOVLW	b'01100000'	    ;setup peripheral interrupt: 
 	MOVWF	PIE1
 	
+			    
+	BANKSEL	RCSTA		    ;Setup receiver
+	MOVLW	b'10010000'
+	MOVWF	RCSTA
+	BCF	TXSTA, SYNC
+	;TODO setup SPBRGH, SPBRG
+	;TODO read RCSTA to get error flags
+	;continue
 	
 	BANKSEL	PORTA		    
 	
