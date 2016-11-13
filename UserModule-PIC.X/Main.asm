@@ -25,9 +25,13 @@ iCount	EQU	d'241'
 	
 	GOTO	setup				    
 	ORG	0x0004		    ;Interruption treatment 	
+	BANKSEL	INTCON
 	BTFSC	INTCON, RBIF	   
 	call	buttonInterrupt	    ;PORTB interrupt flag bit set
 	BCF	INTCON, RBIF
+	BANKSEL	PIR1
+	BTFSC	PIR1, TXIF
+	call	transmitInterrupt
 	RETFIE			    ;Return from interrupt treatment 	    
 
 	    cblock  0x20
@@ -132,6 +136,13 @@ clearCqueue:
 clearPCqueue:
 	MOVLW	0xCC
 	MOVWF	pclast
+	RETURN
+
+transmitInterrupt:
+	;TODO MOVF  X,TXREG
+	MOVLW	b'10101000'	    ;fake data to be transmitted - substitute with actual datas
+	MOVWF	TXREG
+	;TODO bug entering twice in a row
 	RETURN
 	
 buttonInterrupt:
@@ -286,11 +297,6 @@ transmitData:
 	MOVWF	RCSTA
 	BANKSEL	PIE1
 	BSF	PIE1, TXIE	    ;EUSART transmit interrupt enable
-	BANKSEL	PIE1
-	BSF	PIE1, TXIE	    ;EUSART transmit interrupt enable
-	;TODO MOVF  X,TXREG
-	MOVLW	b'10101000'	    ;data to be transmitted
-	MOVWF	TXREG
 	RETURN
 
 receiveData:
@@ -391,5 +397,5 @@ setup:
 loop:	
 	NOP
 	call	transmitData
-	GOTO	loop	
+    	GOTO	loop	
 	END
