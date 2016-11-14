@@ -139,10 +139,12 @@ clearPCqueue:
 	RETURN
 
 transmitInterrupt:
-	;TODO MOVF  X,TXREG
-	MOVLW	b'10101000'	    ;fake data to be transmitted - substitute with actual datas
-	MOVWF	TXREG
-	;TODO bug entering twice in a row
+	;TODO: deve identificar qual guiche solicitou
+	;TODO check which one
+	;BTFSC ... (check if incoming request came from cashier)		
+	call	getFirstPC
+	;BTFSC ... (check if incoming request came from manager)
+	call	getFirstPM	;TODO bug entering twice in a row
 	RETURN
 	
 buttonInterrupt:
@@ -277,15 +279,6 @@ cashierPriorityButton:
 	MOVWF	INDF
 	INCF	pclast
 	RETURN
-
-; Called externally (read I/O pin). 
-getNextInLine:
-	;TODO: essa funcao deve ficar checando se houve um pedido de fila
-	
-	;TODO: deve identificar qual guiche solicitou
-	
-	
-	RETURN
 	
 transmitData:
 	;TODO fetch data from Wreg, save to reg X
@@ -332,14 +325,18 @@ setup:
 	MOVLW	b'01100000'	    ;setup peripheral interrupt: 
 	MOVWF	PIE1
 	
-			    
+	BANKSEL	TXSTA
+	BCF	TXSTA, SYNC	    ;async op
+	BSF	TXSTA, BRGH	    ;baud rate
 	BANKSEL	RCSTA		    ;Setup receiver
 	MOVLW	b'10010000'
 	MOVWF	RCSTA
-	BCF	TXSTA, SYNC
+	BANKSEL	BAUDCTL
+	BSF	BAUDCTL, BRG16
+	MOVWF	BAUDCTL
 	;TODO setup SPBRGH, SPBRG
+	;HOW TO?!
 	;TODO read RCSTA to get error flags
-	;continue
 	
 	BANKSEL	PORTA		    
 	
@@ -396,6 +393,11 @@ setup:
 	
 loop:	
 	NOP
-	call	transmitData
+	;call	transmitData
+	MOVLW	b'01010100' ;test data for receiver testing
+	MOVWF	RCREG
+	;TODO error - not generating interrption
+	;Maybe it has to come from the RSR reg
+	;How to test it?
     	GOTO	loop	
 	END
