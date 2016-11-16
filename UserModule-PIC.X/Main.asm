@@ -43,9 +43,21 @@ iCount	EQU	d'241'
 	    cCount, pcCount, clast, pclast, cnext,
 	    pcnext, csize, pcsize
 	    endc
+
+getNextM:
+	call	getFirstPM  ;TODO delete and implement next line
+	;TODO implement logic: when to call priority and when to call regular?
+	RETURN
+	
+getNextC:
+	call	getFirstPC  ;TODO delete and implement next line
+	;TODO implement logic: when to call priority and when to call regular?
+	RETURN
+	
 getFirstM:
 	MOVF	mnext, W
-	MOVWF	TXREG	;ajeitar pra mandar de verdade
+	MOVWF	TXREG		     ; Raises interrupt flag - calls transmit interrupt routine
+				     ; TODO change format to comply with project API
 	
 	MOVF	mnext, W
 	MOVWF	FSR
@@ -56,11 +68,25 @@ getFirstM:
 	DECF	msize
 	
 	RETURN
-
+	
+getFirstPM:
+	MOVF	pmnext, W
+	MOVWF	TXREG		    ; Raises interrupt flag - calls transmit interrupt routine
+				    ; TODO change format to comply with project API
+	MOVF	pmnext, W
+	MOVWF	FSR
+	MOVLW	0x00
+	MOVWF	INDF
+	
+	INCF	pmnext
+	DECF	pmsize
+	
+	RETURN
+	
 getFirstC:
 	MOVF	cnext, W
-	MOVWF	TXREG	;ajeitar pra mandar de verdade
-	
+	MOVWF	TXREG		     ; Raises interrupt flag - calls transmit interrupt routine
+				     ; TODO change format to comply with project API
 	MOVF	cnext, W
 	MOVWF	FSR
 	MOVLW	0x00
@@ -71,24 +97,10 @@ getFirstC:
 	
 	RETURN
 
-getFirstPM:
-	MOVF	pmnext, W
-	MOVWF	TXREG	;ajeitar pra mandar de verdade
-	
-	MOVF	pmnext, W
-	MOVWF	FSR
-	MOVLW	0x00
-	MOVWF	INDF
-	
-	INCF	pmnext
-	DECF	pmsize
-	
-	RETURN
-
 getFirstPC:
 	MOVF	pcnext, W
-	MOVWF	TXREG	;ajeitar pra mandar de verdade
-	
+	MOVWF	TXREG		    ; Raises interrupt flag - calls transmit interrupt routine
+				    ; TODO change format to comply with project API
 	MOVF	pcnext, W
 	MOVWF	FSR
 	MOVLW	0x00
@@ -143,11 +155,11 @@ transmitInterrupt:
 	MOVLW	b'00000001'	
 	SUBWF	RCREG,0		; TODO check if incoming data is in this register 
 	BTFSC	STATUS, Z	; if subtraction equals zero, guiche '1' wants a client 
-	call	getFirstPC
+	call	getNextC
 	MOVLW	b'00000010'
 	SUBWF	RCREG,0		; TODO check if incoming data is in this register 
 	BTFSC	STATUS, Z	; if subtraction equals zero, now guiche '2' wants a client 
-	call	getFirstPM	
+	call	getNextM	
 	RETURN
 	
 buttonInterrupt:
