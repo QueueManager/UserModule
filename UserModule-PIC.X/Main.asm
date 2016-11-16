@@ -313,7 +313,7 @@ receiveData:
 	
 setup:
 	;configure ports
-	BANKSEL	PORTA
+    	BANKSEL	PORTA
 	CLRF	PORTA
 	BANKSEL	ANSEL		
 	CLRF	ANSEL		    ;digital i/o
@@ -342,18 +342,23 @@ setup:
 	MOVLW	b'01100000'	    ;setup peripheral interrupt: 
 	MOVWF	PIE1
 	
+	BANKSEL	BAUDCTL
+	BSF	BAUDCTL, BRG16
+	MOVWF	BAUDCTL
+	BANKSEL	SPBRG
+	MOVLW	b'00000000'	    ;TODO check wifi module spec
+	MOVWF	SPBRG
+	BANKSEL	SPBRGH
+	MOVLW	b'00001010'	    ;TODO check wifi module spec 
+	;TODO read RCSTA to get error flags
 	BANKSEL	TXSTA
 	BCF	TXSTA, SYNC	    ;async op
 	BSF	TXSTA, BRGH	    ;baud rate
 	BANKSEL	RCSTA		    ;Setup receiver
 	MOVLW	b'10010000'
 	MOVWF	RCSTA
-	BANKSEL	BAUDCTL
-	BSF	BAUDCTL, BRG16
-	MOVWF	BAUDCTL
-	;TODO setup SPBRGH, SPBRG
-	;HOW TO?!
-	;TODO read RCSTA to get error flags
+	BANKSEL	PIR1	
+	BCF	PIR1, RCIF	    ;clear EUSART interrupt flag
 	
 	BANKSEL	PORTA		    
 	
