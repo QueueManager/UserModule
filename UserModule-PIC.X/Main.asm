@@ -1,12 +1,12 @@
 ;;;;;;;;;;; TODO list ;;;;;;;;;;;
-; 1. check if config header is correct
+; 1. DONE check if config header is correct
 ; 2. DONE
 ; 3. add goSleep functionality (to save energy) and wakeUp when button is pressed
-; 4. do we need a reset button?
-; 5. external communications:
-;   5.1 configure output when button is pressed (printer, etc)
-;   5.2 create function to receive request for next in queue from other modules
-; 6. Testar o finalzinho de todas as filas verificando se nao estar invadindo as outras
+; 4. DONE (A: not right now) do we need a reset button?
+; 5. DONE external communications:
+;   5.1 DONE configure output when button is pressed (printer, etc)
+;   5.2 DONE create function to receive request for next in queue from other modules
+; 6. Testar o finalzinho de todas as filas verificando se nao esta invadindo as outras
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
 ; PIC16F883 Configuration Bit Settings
@@ -20,7 +20,8 @@ __CONFIG _CONFIG1, _FOSC_INTRC_NOCLKOUT & _WDTE_ON & _PWRTE_OFF & _MCLRE_ON & _C
  __CONFIG _CONFIG2, _BOR4V_BOR40V & _WRT_OFF
  
 	ORG	0x0000
-iCount	EQU	d'241'
+mPrty	EQU	h'21'		    ;TODO no space left. change location
+cPrty	EQU	h'22'		    ;TODO no space left. change location
 
 	
 	GOTO	setup				    
@@ -45,20 +46,41 @@ iCount	EQU	d'241'
 	    endc
 
 getNextM:
-	call	getFirstPM  ;TODO delete and implement next line
-	;TODO implement logic: when to call priority and when to call regular?
+	BTFSC	mPrty,0
+	goto	getPriorityM	    ;priority bool is 1, so call it
+	goto	getNormalM	    ;priority bool is 0, so call regular
+getPriorityM:
+	call	getFirstPM	    ;get next priority for the manager
+	CLRF	mPrty		    ;make bool = 0 (so the next time it calls a regular)
+	goto	endNextM
+getNormalM:
+	call	getFirstM	    ;get next regular for the manager
+	INCF	mPrty		    ;make bool = 1 (so the next time it calls a priority)
+	goto	endNextM
+endNextM:
 	RETURN
 	
 getNextC:
-	call	getFirstPC  ;TODO delete and implement next line
-	;TODO implement logic: when to call priority and when to call regular?
+	BTFSC	cPrty,0
+	goto	getPriorityC	    ;priority bool is 1, so call it
+	goto	getNormalC	    ;priority bool is 0, so call regular
+getPriorityC:
+	call	getFirstPC	    ;get next priority for the cashier
+	CLRF	cPrty		    ;make bool = 0 (so the next time it calls a regular)
+	goto	endNextC
+getNormalC:
+	call	getFirstC	    ;get next regular for the cashier
+	INCF	cPrty		    ;make bool = 1 (so the next time it calls a priority)
+	goto	endNextC
+endNextC:
 	RETURN
 	
 getFirstM:
 	MOVF	mnext, W
 	MOVWF	TXREG		     ; Raises interrupt flag - calls transmit interrupt routine
 				     ; TODO change format to comply with project API
-	
+				     ; figure out how to send not only 1byte, but 3
+
 	MOVF	mnext, W
 	MOVWF	FSR
 	MOVLW	0x00
@@ -71,8 +93,9 @@ getFirstM:
 	
 getFirstPM:
 	MOVF	pmnext, W
-	MOVWF	TXREG		    ; Raises interrupt flag - calls transmit interrupt routine
+	MOVWF	TXREG	   	    ; Raises interrupt flag - calls transmit interrupt routine
 				    ; TODO change format to comply with project API
+				    ; figure out how to send not only 1byte, but 3
 	MOVF	pmnext, W
 	MOVWF	FSR
 	MOVLW	0x00
@@ -87,6 +110,9 @@ getFirstC:
 	MOVF	cnext, W
 	MOVWF	TXREG		     ; Raises interrupt flag - calls transmit interrupt routine
 				     ; TODO change format to comply with project API
+				     ; figure out how to send not only 1byte, but 3
+
+				     
 	MOVF	cnext, W
 	MOVWF	FSR
 	MOVLW	0x00
@@ -101,6 +127,7 @@ getFirstPC:
 	MOVF	pcnext, W
 	MOVWF	TXREG		    ; Raises interrupt flag - calls transmit interrupt routine
 				    ; TODO change format to comply with project API
+				    ; figure out how to send not only 1byte, but 3
 	MOVF	pcnext, W
 	MOVWF	FSR
 	MOVLW	0x00
@@ -412,14 +439,20 @@ setup:
 	MOVLW	0xBB8
 	MOVWF	pcCount
 	
-	
+	;zeroing booleans
+	CLRF	cPrty
+	CLRF	mPrty
 loop:	
 	NOP
+	;;TRANSMITDATA TEST
 	;call	transmitData
-	MOVLW	b'01010100' ;test data for receiver testing
-	MOVWF	RCREG
+	
+	;;RECEIVEDATA TEST
+	;MOVLW	b'01010100' ;test data for receiver testing
+	;MOVWF	RCREG
 	;TODO error - not generating interrption
 	;Maybe it has to come from the RSR reg
 	;How to test it?
-    	GOTO	loop	
+    	
+	GOTO	loop	
 	END
