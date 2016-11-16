@@ -149,14 +149,14 @@ transmitInterrupt:
 	
 buttonInterrupt:
 	BANKSEL	PORTB			    ;Checks which button was pressed 
-	BTFSC	PORTB, RB4	     
-	call	managerNormalButton	    ;RB4 pressed
-	BTFSC	PORTB, RB5	    
-	call	managerPriorityButton	    ;RB5 pressed
-	BTFSC	PORTB, RB6	    
-    	call	cashierNormalButton	    ;RB6 pressed
-	BTFSC	PORTB, RB7	
-	call	cashierPriorityButton	    ;RB7 pressed
+	BTFSC	PORTB, RB1	     
+	call	managerNormalButton	    ;RB1 pressed
+	BTFSC	PORTB, RB2	    
+	call	managerPriorityButton	    ;RB2 pressed
+	BTFSC	PORTB, RB3	    
+    	call	cashierNormalButton	    ;RB3 pressed
+	BTFSC	PORTB, RB4	
+	call	cashierPriorityButton	    ;RB4 pressed
     	BANKSEL	PORTA
 	RETURN
 
@@ -302,11 +302,13 @@ setup:
 	CLRF	PORTA
 	BANKSEL	ANSEL		
 	CLRF	ANSEL		    ;digital i/o
+	BANKSEL	ANSELH
+	CLRF	ANSELH
 	
 	BANKSEL PORTB
 	CLRF	PORTB
 	BANKSEL	TRISB
-	MOVLW	b'11110000'	    ;Set RB<7:4> as inputs, RB<3:0> as outputs 
+	MOVLW	b'00011111'	    ;Set RB<4:1> as inputs, RB<7:5> as outputs 
 	MOVWF	TRISB ;
 	
 		
@@ -319,7 +321,7 @@ setup:
 	MOVLW	b'11001000'	    ;enable global interruptions, pheriperals
 	MOVWF	INTCON
 	BANKSEL	IOCB		    ;setup
-	MOVLW	b'11110000'	    ;enable interrupt-on-change for pins 4-7	    
+	MOVLW	b'11111111'	    ;enable interrupt-on-change for all RB pins	    
 	MOVWF	IOCB
 	BANKSEL	PIE1
 	MOVLW	b'01100000'	    ;setup peripheral interrupt: 
