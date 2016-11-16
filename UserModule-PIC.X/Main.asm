@@ -139,12 +139,15 @@ clearPCqueue:
 	RETURN
 
 transmitInterrupt:
-	;TODO: deve identificar qual guiche solicitou
-	;TODO check which one
-	;BTFSC ... (check if incoming request came from cashier)		
+	BANKSEL	RCREG
+	MOVLW	b'00000001'	
+	SUBWF	RCREG,0		; TODO check if incoming data is in this register 
+	BTFSC	STATUS, Z	; if subtraction equals zero, guiche '1' wants a client 
 	call	getFirstPC
-	;BTFSC ... (check if incoming request came from manager)
-	call	getFirstPM	;TODO bug entering twice in a row
+	MOVLW	b'00000010'
+	SUBWF	RCREG,0		; TODO check if incoming data is in this register 
+	BTFSC	STATUS, Z	; if subtraction equals zero, now guiche '2' wants a client 
+	call	getFirstPM	
 	RETURN
 	
 buttonInterrupt:
