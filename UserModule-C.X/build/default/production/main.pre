@@ -2010,27 +2010,27 @@ extern __bit __timeout;
 # 27
 unsigned char guiche;
 
-unsigned int mCount = 0;
-unsigned int pmCount = 0;
-unsigned int cCount = 0;
-unsigned int pcCount = 0;
+unsigned char mCount = 0;
+unsigned char pmCount = 0;
+unsigned char cCount = 0;
+unsigned char pcCount = 0;
 
-unsigned int mqueue[20];
+unsigned char mqueue[20];
 unsigned char msize;
 unsigned char mnext;
 unsigned char mlast;
 
-unsigned int pmqueue[20];
+unsigned char pmqueue[20];
 unsigned char pmsize;
 unsigned char pmnext;
 unsigned char pmlast;
 
-unsigned int cqueue[20];
+unsigned char cqueue[20];
 unsigned char csize;
 unsigned char cnext;
 unsigned char clast;
 
-unsigned int pcqueue[20];
+unsigned char pcqueue[20];
 unsigned char pcsize;
 unsigned char pcnext;
 unsigned char pclast;
@@ -2093,12 +2093,6 @@ SPI_send(data[i]);
 }
 
 
-void sendToAttendant(char n){
-
-}
-
-
-
 void getNextManager(){
 
 msize = msize - 1;
@@ -2129,8 +2123,8 @@ if(pclast == 0x13){
 pclast = 0x00;
 }
 
-if(pcCount == 0xFA0){
-pcCount = 0xBB7;
+if(pcCount == 0xFE){
+pcCount = 0x00;
 }
 
 
@@ -2150,8 +2144,8 @@ if(clast == 0x13){
 clast = 0x00;
 }
 
-if(cCount == 0xBB7){
-cCount = 0x7CF;
+if(cCount == 0xFE){
+cCount = 0x00;
 }
 
 
@@ -2173,7 +2167,7 @@ if(mlast == 0x13){
 mlast = 0x00;
 }
 
-if(mCount == 0x3E7){
+if(mCount == 0xFE){
 mCount = 0x00;
 }
 
@@ -2196,8 +2190,8 @@ if(pmlast == 0x13){
 pmlast = 0x00;
 }
 
-if(pmCount == 0x7CF){
-pmCount = 0x3E7;
+if(pmCount == 0xFE){
+pmCount = 0x00;
 }
 
 
@@ -2230,8 +2224,10 @@ _delay((unsigned long)((500)*(8000000/4000.0)));
 PORTAbits.RA2 = 0x00;
 }
 
-} else if(!PORTBbits.RB3){
+}
+else if(!PORTBbits.RB3){
 getNextManager();
+ManagerPriorityButton();
 
 PORTAbits.RA4 = 0x01;
 _delay((unsigned long)((500)*(8000000/4000.0)));
@@ -2241,7 +2237,7 @@ else if(!PORTBbits.RB2){
 CashierNormalButton();
 }
 else if(!PORTBbits.RB1){
-
+CashierPriorityButton();
 }
 }
 
@@ -2384,11 +2380,51 @@ break;
 }
 
 void send_To_Attendant(){
-if (guiche == 0x01){
-
-} else if(guiche == 0x022){
-
+unsigned char priority;
+if (guiche == '1') {
+priority = '5';
+} else if(guiche == '2') {
+priority = '6';
 }
+
+new_at_com();
+tx_serial('C');
+tx_serial('I');
+tx_serial('P');
+tx_serial('S');
+tx_serial('E');
+tx_serial('N');
+tx_serial('D');
+tx_serial('=');
+tx_serial('0');
+tx_serial(',');
+tx_serial('5');
+tx_serial(0xD);
+tx_serial(0xA);
+tx_serial(guiche);
+tx_serial(priority);
+tx_serial('2');
+tx_serial('3');
+tx_serial('4');
+tx_serial(0xD);
+tx_serial(0xA);
+wait_ok();
+
+
+new_at_com();
+tx_serial('C');
+tx_serial('I');
+tx_serial('P');
+tx_serial('C');
+tx_serial('L');
+tx_serial('O');
+tx_serial('S');
+tx_serial('E');
+tx_serial('=');
+tx_serial('0');
+tx_serial(0xD);
+tx_serial(0xA);
+wait_ok();
 }
 
 void send_IPD(){
@@ -2487,8 +2523,6 @@ tx_serial('0');
 tx_serial(0xD);
 tx_serial(0xA);
 wait_ok();
-
-
 }
 
 void usartInit(){
@@ -2523,7 +2557,7 @@ PIE1 = 0x60;
 RCSTA = 0x90;
 TXSTAbits.SYNC = 0x00;
 
-# 555
+# 589
 mlast = 0x00;
 mnext = 0x00;
 msize = 0x00;
@@ -2537,7 +2571,7 @@ pclast = 0x00;
 pcnext = 0x00;
 pcsize = 0x00;
 
-# 582
+
 OSCCON = 0x70;
 usartInit();
 connect_wifi();
@@ -2548,5 +2582,6 @@ while(1)
 wait_Connect();
 rx_serial();
 guiche = RCREG;
+
 }
 }

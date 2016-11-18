@@ -1,6 +1,6 @@
 /*
  * File:   main.c
- * Author: Felipe, Marlon
+ * Author: Felipe, Marlon, Yves
  *
  * Created on 2 de Novembro de 2016, 16:24
  */
@@ -26,32 +26,32 @@
 
 unsigned char guiche;
 
-unsigned int mCount = 0;
-unsigned int pmCount = 0;
-unsigned int cCount = 0;
-unsigned int pcCount = 0;
+unsigned char mCount = 0;
+unsigned char pmCount = 0;
+unsigned char cCount = 0;
+unsigned char pcCount = 0;
 //manager queue
-unsigned int mqueue[20];
+unsigned char mqueue[20];
 unsigned char  msize;
 unsigned char  mnext;
 unsigned char mlast;
 //priority manager queue
-unsigned int pmqueue[20];
+unsigned char pmqueue[20];
 unsigned char  pmsize;
 unsigned char  pmnext;
 unsigned char pmlast;
 //chashier queue
-unsigned int cqueue[20];
+unsigned char cqueue[20];
 unsigned char  csize;
 unsigned char  cnext;
 unsigned char clast;
 //priority cashier queue
-unsigned int pcqueue[20];
+unsigned char pcqueue[20];
 unsigned char  pcsize;
 unsigned char  pcnext;
 unsigned char pclast;
 
-//------------------------PRINTER------------------------------------
+//------------------------PRINTER COMMUNICATION---------------------------------
 
 #define SCK RC3
 #define SDI RC4
@@ -116,13 +116,7 @@ void SPI_sendString(){
         SPI_send(data[i]);
     }
 }
-//-------------------SERIAL and WIFI---------------------------------
-
-void sendToAttendant(char n){
-    //TODO
-}
-
-//-------------------BUTTONS FUNCTIONS-------------------------------
+//-------------------BUTTON FUNCTIONS-------------------------------
 
 void getNextManager(){
     //sendToAttendant(mqueue[mnext])
@@ -154,8 +148,8 @@ void CashierPriorityButton(){
         pclast = 0x00;
     }
     //limitar o count
-    if(pcCount == 0xFA0){
-        pcCount = 0xBB7;
+    if(pcCount == 0xFE){
+        pcCount = 0x00;
     }
     
     //adicionar a fila
@@ -175,8 +169,8 @@ void CashierNormalButton(){
         clast = 0x00;
     }
     //limitar o count
-    if(cCount == 0xBB7){
-        cCount = 0x7CF;
+    if(cCount == 0xFE){
+        cCount = 0x00;
     }
     
     //adicionar a fila
@@ -198,7 +192,7 @@ void ManagerNormalButton(){
         mlast = 0x00;
     }
     //limitar o count
-    if(mCount == 0x3E7){
+    if(mCount == 0xFE){
         mCount = 0x00;
     }
     
@@ -221,8 +215,8 @@ void ManagerPriorityButton(){
         pmlast = 0x00;
     }
     //limitar o count
-    if(pmCount == 0x7CF){
-        pmCount = 0x3E7;
+    if(pmCount == 0xFE){
+        pmCount = 0x00;
     }
     
     //adicionar a fila
@@ -231,13 +225,13 @@ void ManagerPriorityButton(){
     
     pmqueue[pmlast] = pmCount;
     pmlast = pmlast + 1;
-    //sendToPrinter();
+    
 }
 void interrupt buttonINT(){
     
     if(INTCONbits.RBIF){
         
-//        asm("BANKSEL PORTB");
+
         if(!PORTBbits.RB4){ //managerNormalButton
             ManagerNormalButton();
             PORTAbits.RA0 = 0x01;//led verde 1
@@ -255,9 +249,11 @@ void interrupt buttonINT(){
                 PORTAbits.RA2 = 0x00;
             }
             
-        } else if(!PORTBbits.RB3){
+        }
+        else if(!PORTBbits.RB3){
             getNextManager();
-            //ManagerPriorityButton();
+            ManagerPriorityButton();
+            
             PORTAbits.RA4 = 0x01;
             __delay_ms(500);
             PORTAbits.RA4 = 0x00;
@@ -266,13 +262,13 @@ void interrupt buttonINT(){
             CashierNormalButton();
         }
         else if(!PORTBbits.RB1){
-            //CashierPriorityButton();
+            CashierPriorityButton();
         }
     }
     
     INTCONbits.RBIF = 0x00;
 }
-
+//----------------Wifi COMMUNICATION--------------------------------------------
 void overflow(){
                 RCSTAbits.CREN = 0x00;
                 RCSTAbits.CREN = 0x01;
@@ -409,11 +405,51 @@ void wait_Connect () {
 } 
 
 void send_To_Attendant(){
-    if (guiche == 0x01){
-    
-    } else if(guiche == 0x022){
-    
+    unsigned char priority;    
+    if (guiche == '1') {
+        priority = '5';
+    } else if(guiche == '2') {
+        priority = '6';
     }
+
+    new_at_com();
+    tx_serial('C');
+    tx_serial('I');
+    tx_serial('P');
+    tx_serial('S');
+    tx_serial('E');
+    tx_serial('N');
+    tx_serial('D');
+    tx_serial('=');
+    tx_serial('0');
+    tx_serial(',');
+    tx_serial('5');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    tx_serial(guiche);
+    tx_serial(priority);
+    tx_serial('2');
+    tx_serial('3');
+    tx_serial('4');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    wait_ok();
+    
+    // Close connection
+    new_at_com();
+    tx_serial('C');
+    tx_serial('I');
+    tx_serial('P');
+    tx_serial('C');
+    tx_serial('L');
+    tx_serial('O');
+    tx_serial('S');
+    tx_serial('E');
+    tx_serial('=');
+    tx_serial('0');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    wait_ok();
 }
 
 void send_IPD(){
@@ -512,8 +548,6 @@ void connect_wifi() {
     tx_serial(0xD);
     tx_serial(0xA);
     wait_ok();
-    
-    
 }
 
 void usartInit(){
@@ -565,19 +599,6 @@ void main(void) {
     pcnext = 0x00;
     pcsize = 0x00;
     
-       //All LEDs OFF
-    
-//    __delay_ms(250);    
-//    // isso aqui a carol colocou pra ficar igual ao master que deu certo
-//    IO_setup();
-//    SPI_setup_master();
-//    
-//    unsigned char * data;
-//    unsigned char a = 'a';
-//    
-//    data = a;
-//    __delay_ms(3000);
-//    SPI_send(data);
      //---------------------------
     OSCCON = 0x70;
     usartInit();
@@ -589,5 +610,6 @@ void main(void) {
     wait_Connect();
     rx_serial();
     guiche = RCREG;
+//    send_To_Attendant();
     }
 }
