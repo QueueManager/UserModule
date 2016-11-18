@@ -2007,8 +2007,8 @@ extern __bit __timeout;
 #pragma config BOR4V = BOR40V
 #pragma config WRT = OFF
 
-
-
+# 27
+unsigned char guiche;
 
 unsigned int mCount = 0;
 unsigned int pmCount = 0;
@@ -2035,7 +2035,7 @@ unsigned char pcsize;
 unsigned char pcnext;
 unsigned char pclast;
 
-# 58
+# 61
 void IO_setup() {
 TRISC3 = 0;
 TRISC4 = 1;
@@ -2051,7 +2051,7 @@ SSPSTAT = 0b10000000;
 
 SSPCON = 0b00100001;
 
-# 77
+# 80
 PIR1bits.SSPIF = 0;
 
 }
@@ -2290,6 +2290,131 @@ break;
 }
 }
 
+void wait_Connect () {
+while (1) {
+rx_serial();
+if (RCREG != '0') {
+continue;
+}
+rx_serial();
+if (RCREG != ',') {
+continue;
+}
+rx_serial();
+if (RCREG != 'C') {
+continue;
+}
+rx_serial();
+if (RCREG != 'O') {
+continue;
+}
+rx_serial();
+if (RCREG != 'N') {
+continue;
+}
+rx_serial();
+if (RCREG != 'N') {
+continue;
+}
+rx_serial();
+if (RCREG != 'E') {
+continue;
+}
+rx_serial();
+if (RCREG != 'C') {
+continue;
+}
+rx_serial();
+if (RCREG != 'T') {
+continue;
+}
+rx_serial();
+if (RCREG == 0xD) {
+continue;
+}
+rx_serial();
+if (RCREG == 0xA) {
+continue;
+}
+rx_serial();
+if (RCREG == 0xD) {
+continue;
+}
+rx_serial();
+if (RCREG == 0xA) {
+continue;
+}
+rx_serial();
+if (RCREG == '+') {
+continue;
+}
+rx_serial();
+if (RCREG == 'I') {
+continue;
+}
+rx_serial();
+if (RCREG == 'P') {
+continue;
+}
+rx_serial();
+if (RCREG == 'D') {
+continue;
+}
+rx_serial();
+if (RCREG == ',') {
+continue;
+}
+rx_serial();
+if (RCREG == '0') {
+continue;
+}
+rx_serial();
+if (RCREG == ',') {
+continue;
+}
+rx_serial();
+if (RCREG == '1') {
+continue;
+}
+rx_serial();
+if (RCREG == ':') {
+break;
+}
+}
+}
+
+void send_To_Attendant(){
+if (guiche == 0x01){
+
+} else if(guiche == 0x022){
+
+}
+}
+
+void send_IPD(){
+tx_serial('C');
+tx_serial('W');
+tx_serial('M');
+tx_serial('O');
+tx_serial('D');
+tx_serial('E');
+tx_serial('=');
+tx_serial('1');
+tx_serial(0xD);
+tx_serial(0xA);
+tx_serial('C');
+tx_serial('W');
+tx_serial('M');
+tx_serial('O');
+tx_serial('D');
+tx_serial('E');
+tx_serial('=');
+tx_serial('1');
+tx_serial(0xD);
+tx_serial(0xA);
+
+}
+
 void connect_wifi() {
 
 new_at_com();
@@ -2330,6 +2455,7 @@ tx_serial(0xD);
 tx_serial(0xA);
 wait_ok();
 
+new_at_com();
 tx_serial('C');
 tx_serial('P');
 tx_serial('M');
@@ -2340,6 +2466,29 @@ tx_serial('1');
 tx_serial(0xD);
 tx_serial(0xA);
 wait_ok();
+
+new_at_com();
+tx_serial('C');
+tx_serial('I');
+tx_serial('P');
+tx_serial('S');
+tx_serial('E');
+tx_serial('R');
+tx_serial('V');
+tx_serial('E');
+tx_serial('R');
+tx_serial('=');
+tx_serial('1');
+tx_serial(',');
+tx_serial('1');
+tx_serial('0');
+tx_serial('0');
+tx_serial('0');
+tx_serial(0xD);
+tx_serial(0xA);
+wait_ok();
+
+
 }
 
 void usartInit(){
@@ -2368,18 +2517,13 @@ ANSELH = 0x00;
 
 INTCON = 0xC8;
 
-OSCCON = 0x70;
-
-usartInit();
-connect_wifi();
-
 IOCB = 0xFF;
 PIE1 = 0x60;
 
 RCSTA = 0x90;
 TXSTAbits.SYNC = 0x00;
 
-# 408
+# 555
 mlast = 0x00;
 mnext = 0x00;
 msize = 0x00;
@@ -2393,8 +2537,16 @@ pclast = 0x00;
 pcnext = 0x00;
 pcsize = 0x00;
 
-# 435
+# 582
+OSCCON = 0x70;
+usartInit();
+connect_wifi();
+
+
 while(1)
 {
+wait_Connect();
+rx_serial();
+guiche = RCREG;
 }
 }

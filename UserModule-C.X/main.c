@@ -23,6 +23,9 @@
 // Use project enums instead of #define for ON and OFF.
 #define _XTAL_FREQ 8000000
 
+
+unsigned char guiche;
+
 unsigned int mCount = 0;
 unsigned int pmCount = 0;
 unsigned int cCount = 0;
@@ -352,14 +355,90 @@ void wait_Connect () {
         }
         rx_serial();
         if (RCREG == 0xD) {
-            break;
+            continue;
         }
         rx_serial();
         if (RCREG == 0xA) {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == 0xD) {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == 0xA) {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == '+') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == 'I') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == 'P') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == 'D') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == ',') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == '0') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == ',') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == '1') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == ':') {
             break;
         }
     }
 } 
+
+void send_To_Attendant(){
+    if (guiche == 0x01){
+    
+    } else if(guiche == 0x022){
+    
+    }
+}
+
+void send_IPD(){
+    tx_serial('C');
+    tx_serial('W');
+    tx_serial('M');
+    tx_serial('O');
+    tx_serial('D');
+    tx_serial('E');
+    tx_serial('=');
+    tx_serial('1');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    tx_serial('C');
+    tx_serial('W');
+    tx_serial('M');
+    tx_serial('O');
+    tx_serial('D');
+    tx_serial('E');
+    tx_serial('=');
+    tx_serial('1');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    
+}
 
 void connect_wifi() {
 //    CWMODE=1
@@ -462,11 +541,7 @@ void main(void) {
     ANSELH = 0x00;
     
     INTCON = 0xC8;
- 
-    OSCCON = 0x70;
-    usartInit();
-    connect_wifi();
-    
+  
     IOCB = 0xFF;
     PIE1 = 0x60;
     
@@ -503,8 +578,16 @@ void main(void) {
 //    data = a;
 //    __delay_ms(3000);
 //    SPI_send(data);
-            
+     //---------------------------
+    OSCCON = 0x70;
+    usartInit();
+    connect_wifi();
+    
+ //---------------------------         
     while(1)
     {
+    wait_Connect();
+    rx_serial();
+    guiche = RCREG;
     }
 }
