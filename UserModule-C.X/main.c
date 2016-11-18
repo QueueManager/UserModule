@@ -312,6 +312,55 @@ void wait_ok () {
     }
 } 
 
+void wait_Connect () {
+    while (1) {
+        rx_serial();
+        if (RCREG != '0') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != ',') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'C') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'O') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'N') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'N') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'E') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'C') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'T') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == 0xD) {
+            break;
+        }
+        rx_serial();
+        if (RCREG == 0xA) {
+            break;
+        }
+    }
+} 
+
 void connect_wifi() {
 //    CWMODE=1
     new_at_com();
@@ -352,6 +401,7 @@ void connect_wifi() {
     tx_serial(0xA);
     wait_ok();
 //    CPMUX=1
+    new_at_com();
     tx_serial('C');
     tx_serial('P');
     tx_serial('M');
@@ -362,6 +412,29 @@ void connect_wifi() {
     tx_serial(0xD);
     tx_serial(0xA);
     wait_ok();
+    
+    new_at_com();
+    tx_serial('C');
+    tx_serial('I');
+    tx_serial('P');
+    tx_serial('S');
+    tx_serial('E');
+    tx_serial('R');
+    tx_serial('V');
+    tx_serial('E');
+    tx_serial('R');
+    tx_serial('=');
+    tx_serial('1');
+    tx_serial(',');
+    tx_serial('1');
+    tx_serial('0');
+    tx_serial('0');
+    tx_serial('0');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    wait_ok();
+    
+    
 }
 
 void usartInit(){
@@ -391,7 +464,6 @@ void main(void) {
     INTCON = 0xC8;
  
     OSCCON = 0x70;
-    
     usartInit();
     connect_wifi();
     
