@@ -21,7 +21,7 @@
 #pragma config WRT = OFF        // Flash Program Memory Self Write Enable bits (Write protection off)
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
-#define _XTAL_FREQ 4000000
+#define _XTAL_FREQ 8000000
 
 unsigned int mCount = 0;
 unsigned int pmCount = 0;
@@ -269,109 +269,109 @@ void interrupt buttonINT(){
     
     INTCONbits.RBIF = 0x00;
 }
-//
-//void overflow(){
-//                RCSTAbits.CREN = 0x00;
-//                RCSTAbits.CREN = 0x01;
-//}
 
-//void tx_serial(unsigned char aChar){
-//    while(!PIR1bits.TXIF) { }
-//    TXREG = aChar;
-//}
-//
-//void rx_serial(){
-//                
-//    do {
-//        if(RCSTAbits.OERR){
-//            overflow();
-//        }
-//    } while (!PIR1bits.RCIF);
-//}
-//
-//void new_at_com() {
-//    tx_serial('A');
-//    tx_serial('T');
-//    tx_serial('+');
-//}
-//
-//void wait_ok () {
-//    while (1) {
-//        rx_serial();
-//        if (RCREG != 'O') {
-//            continue;
-//        }
-//        rx_serial();
-//        if (RCREG != 'K') {
-//            continue;
-//        }
-//        rx_serial();
-//        if (RCREG == 0xD) {
-//            break;
-//        }
-//    }
-//} 
-//
-//void connect_wifi() {
-////    CWMODE=1
-//    new_at_com();
-//    tx_serial('C');
-//    tx_serial('W');
-//    tx_serial('M');
-//    tx_serial('O');
-//    tx_serial('D');
-//    tx_serial('E');
-//    tx_serial('=');
-//    tx_serial('1');
-//    tx_serial(0xD);
-//    tx_serial(0xA);
-//    wait_ok();
-////    CWJAP_CUR="dlink",""
-//    new_at_com();
-//    tx_serial('C');
-//    tx_serial('W');
-//    tx_serial('J');
-//    tx_serial('A');
-//    tx_serial('P');
-//    tx_serial('_');
-//    tx_serial('C');
-//    tx_serial('U');
-//    tx_serial('R');
-//    tx_serial('=');
-//    tx_serial('"');
-//    tx_serial('d');
-//    tx_serial('l');
-//    tx_serial('i');
-//    tx_serial('n');
-//    tx_serial('k');
-//    tx_serial('"');
-//    tx_serial(',');
-//    tx_serial('"');
-//    tx_serial('"');
-//    tx_serial(0xD);
-//    tx_serial(0xA);
-//    wait_ok();
-////    CPMUX=1
-//    tx_serial('C');
-//    tx_serial('P');
-//    tx_serial('M');
-//    tx_serial('U');
-//    tx_serial('X');
-//    tx_serial('=');
-//    tx_serial('1');
-//    tx_serial(0xD);
-//    tx_serial(0xA);
-//    wait_ok();
-//}
-//
-//void usartInit(){
-//    SPBRG = 0xC;
-//    PIR1bits.RCIF = 0x00;
-//    RCSTAbits.SPEN = 0x01;
-//    RCSTAbits.CREN = 0x01;
-//    TXSTAbits.SYNC = 0x00;
-//    TXSTAbits.TXEN = 0x01;
-//}
+void overflow(){
+                RCSTAbits.CREN = 0x00;
+                RCSTAbits.CREN = 0x01;
+}
+
+void tx_serial(unsigned char aChar){
+    while(!PIR1bits.TXIF) { }
+    TXREG = aChar;
+}
+
+void rx_serial(){
+                
+    do {
+        if(RCSTAbits.OERR){
+            overflow();
+        }
+    } while (!PIR1bits.RCIF);
+}
+
+void new_at_com() {
+    tx_serial('A');
+    tx_serial('T');
+    tx_serial('+');
+}
+
+void wait_ok () {
+    while (1) {
+        rx_serial();
+        if (RCREG != 'O') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG != 'K') {
+            continue;
+        }
+        rx_serial();
+        if (RCREG == 0xD) {
+            break;
+        }
+    }
+} 
+
+void connect_wifi() {
+//    CWMODE=1
+    new_at_com();
+    tx_serial('C');
+    tx_serial('W');
+    tx_serial('M');
+    tx_serial('O');
+    tx_serial('D');
+    tx_serial('E');
+    tx_serial('=');
+    tx_serial('1');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    wait_ok();
+//    CWJAP_CUR="dlink",""
+    new_at_com();
+    tx_serial('C');
+    tx_serial('W');
+    tx_serial('J');
+    tx_serial('A');
+    tx_serial('P');
+    tx_serial('_');
+    tx_serial('C');
+    tx_serial('U');
+    tx_serial('R');
+    tx_serial('=');
+    tx_serial('"');
+    tx_serial('d');
+    tx_serial('l');
+    tx_serial('i');
+    tx_serial('n');
+    tx_serial('k');
+    tx_serial('"');
+    tx_serial(',');
+    tx_serial('"');
+    tx_serial('"');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    wait_ok();
+//    CPMUX=1
+    tx_serial('C');
+    tx_serial('P');
+    tx_serial('M');
+    tx_serial('U');
+    tx_serial('X');
+    tx_serial('=');
+    tx_serial('1');
+    tx_serial(0xD);
+    tx_serial(0xA);
+    wait_ok();
+}
+
+void usartInit(){
+    SPBRG = 0xC;
+    PIR1bits.RCIF = 0x00;
+    RCSTAbits.SPEN = 0x01;
+    RCSTAbits.CREN = 0x01;
+    TXSTAbits.SYNC = 0x00;
+    TXSTAbits.TXEN = 0x01;
+}
 void main(void) {
     nRBPU = 0;      //Enable PORTB internal pull up resistor
     
@@ -390,15 +390,16 @@ void main(void) {
     
     INTCON = 0xC8;
  
-    //usartInit();
-    //connect_wifi();
+    OSCCON = 0x70;
+    
+    usartInit();
+    connect_wifi();
     
     IOCB = 0xFF;
     PIE1 = 0x60;
     
     RCSTA = 0x90;
     TXSTAbits.SYNC = 0x00;
-    
    
     //TODO setup SPBRGH, SPBRG
 	//TODO read RCSTA to get error flags
@@ -419,17 +420,17 @@ void main(void) {
     
        //All LEDs OFF
     
-    __delay_ms(250);    
-    // isso aqui a carol colocou pra ficar igual ao master que deu certo
-    IO_setup();
-    SPI_setup_master();
-    
-    unsigned char * data;
-    unsigned char a = 'a';
-    
-    data = a;
-    __delay_ms(3000);
-    SPI_send(data);
+//    __delay_ms(250);    
+//    // isso aqui a carol colocou pra ficar igual ao master que deu certo
+//    IO_setup();
+//    SPI_setup_master();
+//    
+//    unsigned char * data;
+//    unsigned char a = 'a';
+//    
+//    data = a;
+//    __delay_ms(3000);
+//    SPI_send(data);
             
     while(1)
     {

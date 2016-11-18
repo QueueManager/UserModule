@@ -114,6 +114,26 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S35 . . . . . ]
 "963
 [v _RCSTAbits `VS35 ~T0 @X0 0 e@24 ]
+"1027
+[v _TXREG `Vuc ~T0 @X0 0 e@25 ]
+"1033
+[v _RCREG `Vuc ~T0 @X0 0 e@26 ]
+"2430
+[v _SPBRG `Vuc ~T0 @X0 0 e@153 ]
+"2351
+[s S96 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S96 . TX9D TRMT BRGH SENDB SYNC TXEN TX9 CSRC ]
+"2361
+[s S97 :1 `uc 1 :5 `uc 1 :1 `uc 1 ]
+[n S97 . TXD8 . nTX8 ]
+"2366
+[s S98 :6 `uc 1 :1 `uc 1 ]
+[n S98 . . TX8_9 ]
+"2350
+[u S95 `S96 1 `S97 1 `S98 1 ]
+[n S95 . . . . ]
+"2371
+[v _TXSTAbits `VS95 ~T0 @X0 0 e@152 ]
 [p mainexit ]
 "3994
 [v _nRBPU `Vb ~T0 @X0 0 e@1039 ]
@@ -137,26 +157,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _ANSELH `Vuc ~T0 @X0 0 e@393 ]
 "369
 [v _INTCON `Vuc ~T0 @X0 0 e@11 ]
+"1661
+[v _OSCCON `Vuc ~T0 @X0 0 e@143 ]
 "2207
 [v _IOCB `Vuc ~T0 @X0 0 e@150 ]
 "1504
 [v _PIE1 `Vuc ~T0 @X0 0 e@140 ]
 "933
 [v _RCSTA `Vuc ~T0 @X0 0 e@24 ]
-"2351
-[s S96 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S96 . TX9D TRMT BRGH SENDB SYNC TXEN TX9 CSRC ]
-"2361
-[s S97 :1 `uc 1 :5 `uc 1 :1 `uc 1 ]
-[n S97 . TXD8 . nTX8 ]
-"2366
-[s S98 :6 `uc 1 :1 `uc 1 ]
-[n S98 . . TX8_9 ]
-"2350
-[u S95 `S96 1 `S97 1 `S98 1 ]
-[n S95 . . . . ]
-"2371
-[v _TXSTAbits `VS95 ~T0 @X0 0 e@152 ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -2093,9 +2101,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 208: SPI_send('A');
 "208
 [e ( _SPI_send (1 -> -> 65 `ui `uc ]
-[; ;main.c: 209: _delay((unsigned long)((500)*(4000000/4000.0)));
+[; ;main.c: 209: _delay((unsigned long)((500)*(8000000/4000.0)));
 "209
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 4000000 `l `d .4000.0 `ul ]
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 [; ;main.c: 210: }
 "210
 [e :UE 164 ]
@@ -2176,9 +2184,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 240: PORTAbits.RA0 = 0x01;
 "240
 [e = . . _PORTAbits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 241: _delay((unsigned long)((500)*(4000000/4000.0)));
+[; ;main.c: 241: _delay((unsigned long)((500)*(8000000/4000.0)));
 "241
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 4000000 `l `d .4000.0 `ul ]
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 [; ;main.c: 242: PORTAbits.RA0 = 0x00;
 "242
 [e = . . _PORTAbits 0 0 -> -> 0 `i `uc ]
@@ -2189,9 +2197,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 245: PORTAbits.RA1 = 0x01;
 "245
 [e = . . _PORTAbits 0 1 -> -> 1 `i `uc ]
-[; ;main.c: 246: _delay((unsigned long)((500)*(4000000/4000.0)));
+[; ;main.c: 246: _delay((unsigned long)((500)*(8000000/4000.0)));
 "246
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 4000000 `l `d .4000.0 `ul ]
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 [; ;main.c: 247: PORTAbits.RA1 = 0x00;
 "247
 [e = . . _PORTAbits 0 1 -> -> 0 `i `uc ]
@@ -2206,9 +2214,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 250: PORTAbits.RA2 = 0x01;
 "250
 [e = . . _PORTAbits 0 2 -> -> 1 `i `uc ]
-[; ;main.c: 251: _delay((unsigned long)((500)*(4000000/4000.0)));
+[; ;main.c: 251: _delay((unsigned long)((500)*(8000000/4000.0)));
 "251
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 4000000 `l `d .4000.0 `ul ]
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 [; ;main.c: 252: PORTAbits.RA2 = 0x00;
 "252
 [e = . . _PORTAbits 0 2 -> -> 0 `i `uc ]
@@ -2229,9 +2237,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 258: PORTAbits.RA4 = 0x01;
 "258
 [e = . . _PORTAbits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 259: _delay((unsigned long)((500)*(4000000/4000.0)));
+[; ;main.c: 259: _delay((unsigned long)((500)*(8000000/4000.0)));
 "259
-[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 4000000 `l `d .4000.0 `ul ]
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 [; ;main.c: 260: PORTAbits.RA4 = 0x00;
 "260
 [e = . . _PORTAbits 0 4 -> -> 0 `i `uc ]
@@ -2290,6 +2298,317 @@ Version 3.2 HI-TECH Software Intermediate Code
 "276
 [e :UE 183 ]
 }
+"278
+[v _tx_serial `(v ~T0 @X0 1 ef1`uc ]
+{
+[; ;main.c: 278: void tx_serial(unsigned char aChar){
+[e :U _tx_serial ]
+[v _aChar `uc ~T0 @X0 1 r1 ]
+[f ]
+[; ;main.c: 279: while(!PIR1bits.TXIF) { }
+"279
+[e $U 185  ]
+[e :U 186 ]
+{
+}
+[e :U 185 ]
+[e $ ! != -> . . _PIR1bits 0 4 `i -> -> -> 0 `i `Vuc `i 186  ]
+[e :U 187 ]
+[; ;main.c: 280: TXREG = aChar;
+"280
+[e = _TXREG _aChar ]
+[; ;main.c: 281: }
+"281
+[e :UE 184 ]
+}
+"283
+[v _rx_serial `(v ~T0 @X0 1 ef ]
+{
+[; ;main.c: 283: void rx_serial(){
+[e :U _rx_serial ]
+[f ]
+[; ;main.c: 285: do {
+"285
+[e :U 191 ]
+{
+[; ;main.c: 286: if(RCSTAbits.OERR){
+"286
+[e $ ! != -> . . _RCSTAbits 0 1 `i -> -> -> 0 `i `Vuc `i 192  ]
+{
+[; ;main.c: 287: overflow();
+"287
+[e ( _overflow ..  ]
+"288
+}
+[e :U 192 ]
+"289
+}
+[; ;main.c: 288: }
+[; ;main.c: 289: } while (!PIR1bits.RCIF);
+[e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 191  ]
+[e :U 190 ]
+[; ;main.c: 290: }
+"290
+[e :UE 188 ]
+}
+"292
+[v _new_at_com `(v ~T0 @X0 1 ef ]
+{
+[; ;main.c: 292: void new_at_com() {
+[e :U _new_at_com ]
+[f ]
+[; ;main.c: 293: tx_serial('A');
+"293
+[e ( _tx_serial (1 -> -> 65 `ui `uc ]
+[; ;main.c: 294: tx_serial('T');
+"294
+[e ( _tx_serial (1 -> -> 84 `ui `uc ]
+[; ;main.c: 295: tx_serial('+');
+"295
+[e ( _tx_serial (1 -> -> 43 `ui `uc ]
+[; ;main.c: 296: }
+"296
+[e :UE 193 ]
+}
+"298
+[v _wait_ok `(v ~T0 @X0 1 ef ]
+{
+[; ;main.c: 298: void wait_ok () {
+[e :U _wait_ok ]
+[f ]
+[; ;main.c: 299: while (1) {
+"299
+[e :U 196 ]
+{
+[; ;main.c: 300: rx_serial();
+"300
+[e ( _rx_serial ..  ]
+[; ;main.c: 301: if (RCREG != 'O') {
+"301
+[e $ ! != -> _RCREG `ui -> 79 `ui 198  ]
+{
+[; ;main.c: 302: continue;
+"302
+[e $U 195  ]
+"303
+}
+[e :U 198 ]
+[; ;main.c: 303: }
+[; ;main.c: 304: rx_serial();
+"304
+[e ( _rx_serial ..  ]
+[; ;main.c: 305: if (RCREG != 'K') {
+"305
+[e $ ! != -> _RCREG `ui -> 75 `ui 199  ]
+{
+[; ;main.c: 306: continue;
+"306
+[e $U 195  ]
+"307
+}
+[e :U 199 ]
+[; ;main.c: 307: }
+[; ;main.c: 308: rx_serial();
+"308
+[e ( _rx_serial ..  ]
+[; ;main.c: 309: if (RCREG == 0xD) {
+"309
+[e $ ! == -> _RCREG `i -> 13 `i 200  ]
+{
+[; ;main.c: 310: break;
+"310
+[e $U 197  ]
+"311
+}
+[e :U 200 ]
+"312
+}
+[e :U 195 ]
+"299
+[e $U 196  ]
+[e :U 197 ]
+[; ;main.c: 311: }
+[; ;main.c: 312: }
+[; ;main.c: 313: }
+"313
+[e :UE 194 ]
+}
+"315
+[v _connect_wifi `(v ~T0 @X0 1 ef ]
+{
+[; ;main.c: 315: void connect_wifi() {
+[e :U _connect_wifi ]
+[f ]
+[; ;main.c: 317: new_at_com();
+"317
+[e ( _new_at_com ..  ]
+[; ;main.c: 318: tx_serial('C');
+"318
+[e ( _tx_serial (1 -> -> 67 `ui `uc ]
+[; ;main.c: 319: tx_serial('W');
+"319
+[e ( _tx_serial (1 -> -> 87 `ui `uc ]
+[; ;main.c: 320: tx_serial('M');
+"320
+[e ( _tx_serial (1 -> -> 77 `ui `uc ]
+[; ;main.c: 321: tx_serial('O');
+"321
+[e ( _tx_serial (1 -> -> 79 `ui `uc ]
+[; ;main.c: 322: tx_serial('D');
+"322
+[e ( _tx_serial (1 -> -> 68 `ui `uc ]
+[; ;main.c: 323: tx_serial('E');
+"323
+[e ( _tx_serial (1 -> -> 69 `ui `uc ]
+[; ;main.c: 324: tx_serial('=');
+"324
+[e ( _tx_serial (1 -> -> 61 `ui `uc ]
+[; ;main.c: 325: tx_serial('1');
+"325
+[e ( _tx_serial (1 -> -> 49 `ui `uc ]
+[; ;main.c: 326: tx_serial(0xD);
+"326
+[e ( _tx_serial (1 -> -> 13 `i `uc ]
+[; ;main.c: 327: tx_serial(0xA);
+"327
+[e ( _tx_serial (1 -> -> 10 `i `uc ]
+[; ;main.c: 328: wait_ok();
+"328
+[e ( _wait_ok ..  ]
+[; ;main.c: 330: new_at_com();
+"330
+[e ( _new_at_com ..  ]
+[; ;main.c: 331: tx_serial('C');
+"331
+[e ( _tx_serial (1 -> -> 67 `ui `uc ]
+[; ;main.c: 332: tx_serial('W');
+"332
+[e ( _tx_serial (1 -> -> 87 `ui `uc ]
+[; ;main.c: 333: tx_serial('J');
+"333
+[e ( _tx_serial (1 -> -> 74 `ui `uc ]
+[; ;main.c: 334: tx_serial('A');
+"334
+[e ( _tx_serial (1 -> -> 65 `ui `uc ]
+[; ;main.c: 335: tx_serial('P');
+"335
+[e ( _tx_serial (1 -> -> 80 `ui `uc ]
+[; ;main.c: 336: tx_serial('_');
+"336
+[e ( _tx_serial (1 -> -> 95 `ui `uc ]
+[; ;main.c: 337: tx_serial('C');
+"337
+[e ( _tx_serial (1 -> -> 67 `ui `uc ]
+[; ;main.c: 338: tx_serial('U');
+"338
+[e ( _tx_serial (1 -> -> 85 `ui `uc ]
+[; ;main.c: 339: tx_serial('R');
+"339
+[e ( _tx_serial (1 -> -> 82 `ui `uc ]
+[; ;main.c: 340: tx_serial('=');
+"340
+[e ( _tx_serial (1 -> -> 61 `ui `uc ]
+[; ;main.c: 341: tx_serial('"');
+"341
+[e ( _tx_serial (1 -> -> 34 `ui `uc ]
+[; ;main.c: 342: tx_serial('d');
+"342
+[e ( _tx_serial (1 -> -> 100 `ui `uc ]
+[; ;main.c: 343: tx_serial('l');
+"343
+[e ( _tx_serial (1 -> -> 108 `ui `uc ]
+[; ;main.c: 344: tx_serial('i');
+"344
+[e ( _tx_serial (1 -> -> 105 `ui `uc ]
+[; ;main.c: 345: tx_serial('n');
+"345
+[e ( _tx_serial (1 -> -> 110 `ui `uc ]
+[; ;main.c: 346: tx_serial('k');
+"346
+[e ( _tx_serial (1 -> -> 107 `ui `uc ]
+[; ;main.c: 347: tx_serial('"');
+"347
+[e ( _tx_serial (1 -> -> 34 `ui `uc ]
+[; ;main.c: 348: tx_serial(',');
+"348
+[e ( _tx_serial (1 -> -> 44 `ui `uc ]
+[; ;main.c: 349: tx_serial('"');
+"349
+[e ( _tx_serial (1 -> -> 34 `ui `uc ]
+[; ;main.c: 350: tx_serial('"');
+"350
+[e ( _tx_serial (1 -> -> 34 `ui `uc ]
+[; ;main.c: 351: tx_serial(0xD);
+"351
+[e ( _tx_serial (1 -> -> 13 `i `uc ]
+[; ;main.c: 352: tx_serial(0xA);
+"352
+[e ( _tx_serial (1 -> -> 10 `i `uc ]
+[; ;main.c: 353: wait_ok();
+"353
+[e ( _wait_ok ..  ]
+[; ;main.c: 355: tx_serial('C');
+"355
+[e ( _tx_serial (1 -> -> 67 `ui `uc ]
+[; ;main.c: 356: tx_serial('P');
+"356
+[e ( _tx_serial (1 -> -> 80 `ui `uc ]
+[; ;main.c: 357: tx_serial('M');
+"357
+[e ( _tx_serial (1 -> -> 77 `ui `uc ]
+[; ;main.c: 358: tx_serial('U');
+"358
+[e ( _tx_serial (1 -> -> 85 `ui `uc ]
+[; ;main.c: 359: tx_serial('X');
+"359
+[e ( _tx_serial (1 -> -> 88 `ui `uc ]
+[; ;main.c: 360: tx_serial('=');
+"360
+[e ( _tx_serial (1 -> -> 61 `ui `uc ]
+[; ;main.c: 361: tx_serial('1');
+"361
+[e ( _tx_serial (1 -> -> 49 `ui `uc ]
+[; ;main.c: 362: tx_serial(0xD);
+"362
+[e ( _tx_serial (1 -> -> 13 `i `uc ]
+[; ;main.c: 363: tx_serial(0xA);
+"363
+[e ( _tx_serial (1 -> -> 10 `i `uc ]
+[; ;main.c: 364: wait_ok();
+"364
+[e ( _wait_ok ..  ]
+[; ;main.c: 365: }
+"365
+[e :UE 201 ]
+}
+"367
+[v _usartInit `(v ~T0 @X0 1 ef ]
+{
+[; ;main.c: 367: void usartInit(){
+[e :U _usartInit ]
+[f ]
+[; ;main.c: 368: SPBRG = 0xC;
+"368
+[e = _SPBRG -> -> 12 `i `uc ]
+[; ;main.c: 369: PIR1bits.RCIF = 0x00;
+"369
+[e = . . _PIR1bits 0 5 -> -> 0 `i `uc ]
+[; ;main.c: 370: RCSTAbits.SPEN = 0x01;
+"370
+[e = . . _RCSTAbits 0 7 -> -> 1 `i `uc ]
+[; ;main.c: 371: RCSTAbits.CREN = 0x01;
+"371
+[e = . . _RCSTAbits 0 4 -> -> 1 `i `uc ]
+[; ;main.c: 372: TXSTAbits.SYNC = 0x00;
+"372
+[e = . . _TXSTAbits 0 4 -> -> 0 `i `uc ]
+[; ;main.c: 373: TXSTAbits.TXEN = 0x01;
+"373
+[e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
+[; ;main.c: 374: }
+"374
+[e :UE 202 ]
+}
 "375
 [v _main `(v ~T0 @X0 1 ef ]
 {
@@ -2329,77 +2648,77 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 391: INTCON = 0xC8;
 "391
 [e = _INTCON -> -> 200 `i `uc ]
-[; ;main.c: 396: IOCB = 0xFF;
+[; ;main.c: 393: OSCCON = 0x70;
+"393
+[e = _OSCCON -> -> 112 `i `uc ]
+[; ;main.c: 395: usartInit();
+"395
+[e ( _usartInit ..  ]
+[; ;main.c: 396: connect_wifi();
 "396
+[e ( _connect_wifi ..  ]
+[; ;main.c: 398: IOCB = 0xFF;
+"398
 [e = _IOCB -> -> 255 `i `uc ]
-[; ;main.c: 397: PIE1 = 0x60;
-"397
-[e = _PIE1 -> -> 96 `i `uc ]
-[; ;main.c: 399: RCSTA = 0x90;
+[; ;main.c: 399: PIE1 = 0x60;
 "399
+[e = _PIE1 -> -> 96 `i `uc ]
+[; ;main.c: 401: RCSTA = 0x90;
+"401
 [e = _RCSTA -> -> 144 `i `uc ]
-[; ;main.c: 400: TXSTAbits.SYNC = 0x00;
-"400
+[; ;main.c: 402: TXSTAbits.SYNC = 0x00;
+"402
 [e = . . _TXSTAbits 0 4 -> -> 0 `i `uc ]
-[; ;main.c: 407: mlast = 0x00;
-"407
-[e = _mlast -> -> 0 `i `uc ]
-[; ;main.c: 408: mnext = 0x00;
+[; ;main.c: 408: mlast = 0x00;
 "408
-[e = _mnext -> -> 0 `i `uc ]
-[; ;main.c: 409: msize = 0x00;
+[e = _mlast -> -> 0 `i `uc ]
+[; ;main.c: 409: mnext = 0x00;
 "409
-[e = _msize -> -> 0 `i `uc ]
-[; ;main.c: 410: pmlast = 0x00;
+[e = _mnext -> -> 0 `i `uc ]
+[; ;main.c: 410: msize = 0x00;
 "410
-[e = _pmlast -> -> 0 `i `uc ]
-[; ;main.c: 411: pmnext = 0x00;
+[e = _msize -> -> 0 `i `uc ]
+[; ;main.c: 411: pmlast = 0x00;
 "411
-[e = _pmnext -> -> 0 `i `uc ]
-[; ;main.c: 412: pmsize = 0x00;
+[e = _pmlast -> -> 0 `i `uc ]
+[; ;main.c: 412: pmnext = 0x00;
 "412
-[e = _pmsize -> -> 0 `i `uc ]
-[; ;main.c: 413: clast = 0x00;
+[e = _pmnext -> -> 0 `i `uc ]
+[; ;main.c: 413: pmsize = 0x00;
 "413
-[e = _clast -> -> 0 `i `uc ]
-[; ;main.c: 414: cnext = 0x00;
+[e = _pmsize -> -> 0 `i `uc ]
+[; ;main.c: 414: clast = 0x00;
 "414
-[e = _cnext -> -> 0 `i `uc ]
-[; ;main.c: 415: csize = 0x00;
+[e = _clast -> -> 0 `i `uc ]
+[; ;main.c: 415: cnext = 0x00;
 "415
-[e = _csize -> -> 0 `i `uc ]
-[; ;main.c: 416: pclast = 0x00;
+[e = _cnext -> -> 0 `i `uc ]
+[; ;main.c: 416: csize = 0x00;
 "416
-[e = _pclast -> -> 0 `i `uc ]
-[; ;main.c: 417: pcnext = 0x00;
+[e = _csize -> -> 0 `i `uc ]
+[; ;main.c: 417: pclast = 0x00;
 "417
-[e = _pcnext -> -> 0 `i `uc ]
-[; ;main.c: 418: pcsize = 0x00;
+[e = _pclast -> -> 0 `i `uc ]
+[; ;main.c: 418: pcnext = 0x00;
 "418
+[e = _pcnext -> -> 0 `i `uc ]
+[; ;main.c: 419: pcsize = 0x00;
+"419
 [e = _pcsize -> -> 0 `i `uc ]
-[; ;main.c: 422: _delay((unsigned long)((250)*(4000000/4000.0)));
-"422
-[e ( __delay (1 -> * -> -> 250 `i `d / -> -> 4000000 `l `d .4000.0 `ul ]
-[; ;main.c: 424: IO_setup();
-"424
-[e ( _IO_setup ..  ]
-[; ;main.c: 425: SPI_setup_master();
-"425
-[e ( _SPI_setup_master ..  ]
-[; ;main.c: 427: while(1)
-"427
-[e :U 186 ]
-[; ;main.c: 428: {
-"428
+[; ;main.c: 435: while(1)
+"435
+[e :U 205 ]
+[; ;main.c: 436: {
+"436
 {
-"429
+"437
 }
-[e :U 185 ]
-"427
-[e $U 186  ]
-[e :U 187 ]
-[; ;main.c: 429: }
-[; ;main.c: 430: }
-"430
-[e :UE 184 ]
+[e :U 204 ]
+"435
+[e $U 205  ]
+[e :U 206 ]
+[; ;main.c: 437: }
+[; ;main.c: 438: }
+"438
+[e :UE 203 ]
 }

@@ -2184,7 +2184,7 @@ mCount = mCount + 1;
 mqueue[mlast] = mCount;
 mlast = mlast + 1;
 SPI_send('A');
-_delay((unsigned long)((500)*(4000000/4000.0)));
+_delay((unsigned long)((500)*(8000000/4000.0)));
 }
 void ManagerPriorityButton(){
 
@@ -2216,17 +2216,17 @@ if(INTCONbits.RBIF){
 if(!PORTBbits.RB4){
 ManagerNormalButton();
 PORTAbits.RA0 = 0x01;
-_delay((unsigned long)((500)*(4000000/4000.0)));
+_delay((unsigned long)((500)*(8000000/4000.0)));
 PORTAbits.RA0 = 0x00;
 
 if(msize == 0x0A){
 PORTAbits.RA1 = 0x01;
-_delay((unsigned long)((500)*(4000000/4000.0)));
+_delay((unsigned long)((500)*(8000000/4000.0)));
 PORTAbits.RA1 = 0x00;
 }
 if(msize == 0x13){
 PORTAbits.RA2 = 0x01;
-_delay((unsigned long)((500)*(4000000/4000.0)));
+_delay((unsigned long)((500)*(8000000/4000.0)));
 PORTAbits.RA2 = 0x00;
 }
 
@@ -2234,7 +2234,7 @@ PORTAbits.RA2 = 0x00;
 getNextManager();
 
 PORTAbits.RA4 = 0x01;
-_delay((unsigned long)((500)*(4000000/4000.0)));
+_delay((unsigned long)((500)*(8000000/4000.0)));
 PORTAbits.RA4 = 0x00;
 }
 else if(!PORTBbits.RB2){
@@ -2253,7 +2253,103 @@ RCSTAbits.CREN = 0x00;
 RCSTAbits.CREN = 0x01;
 }
 
-# 375
+void tx_serial(unsigned char aChar){
+while(!PIR1bits.TXIF) { }
+TXREG = aChar;
+}
+
+void rx_serial(){
+
+do {
+if(RCSTAbits.OERR){
+overflow();
+}
+} while (!PIR1bits.RCIF);
+}
+
+void new_at_com() {
+tx_serial('A');
+tx_serial('T');
+tx_serial('+');
+}
+
+void wait_ok () {
+while (1) {
+rx_serial();
+if (RCREG != 'O') {
+continue;
+}
+rx_serial();
+if (RCREG != 'K') {
+continue;
+}
+rx_serial();
+if (RCREG == 0xD) {
+break;
+}
+}
+}
+
+void connect_wifi() {
+
+new_at_com();
+tx_serial('C');
+tx_serial('W');
+tx_serial('M');
+tx_serial('O');
+tx_serial('D');
+tx_serial('E');
+tx_serial('=');
+tx_serial('1');
+tx_serial(0xD);
+tx_serial(0xA);
+wait_ok();
+
+new_at_com();
+tx_serial('C');
+tx_serial('W');
+tx_serial('J');
+tx_serial('A');
+tx_serial('P');
+tx_serial('_');
+tx_serial('C');
+tx_serial('U');
+tx_serial('R');
+tx_serial('=');
+tx_serial('"');
+tx_serial('d');
+tx_serial('l');
+tx_serial('i');
+tx_serial('n');
+tx_serial('k');
+tx_serial('"');
+tx_serial(',');
+tx_serial('"');
+tx_serial('"');
+tx_serial(0xD);
+tx_serial(0xA);
+wait_ok();
+
+tx_serial('C');
+tx_serial('P');
+tx_serial('M');
+tx_serial('U');
+tx_serial('X');
+tx_serial('=');
+tx_serial('1');
+tx_serial(0xD);
+tx_serial(0xA);
+wait_ok();
+}
+
+void usartInit(){
+SPBRG = 0xC;
+PIR1bits.RCIF = 0x00;
+RCSTAbits.SPEN = 0x01;
+RCSTAbits.CREN = 0x01;
+TXSTAbits.SYNC = 0x00;
+TXSTAbits.TXEN = 0x01;
+}
 void main(void) {
 nRBPU = 0;
 
@@ -2272,8 +2368,10 @@ ANSELH = 0x00;
 
 INTCON = 0xC8;
 
+OSCCON = 0x70;
 
-
+usartInit();
+connect_wifi();
 
 IOCB = 0xFF;
 PIE1 = 0x60;
@@ -2281,7 +2379,7 @@ PIE1 = 0x60;
 RCSTA = 0x90;
 TXSTAbits.SYNC = 0x00;
 
-# 407
+# 408
 mlast = 0x00;
 mnext = 0x00;
 msize = 0x00;
@@ -2295,13 +2393,7 @@ pclast = 0x00;
 pcnext = 0x00;
 pcsize = 0x00;
 
-
-
-_delay((unsigned long)((250)*(4000000/4000.0)));
-
-IO_setup();
-SPI_setup_master();
-
+# 435
 while(1)
 {
 }

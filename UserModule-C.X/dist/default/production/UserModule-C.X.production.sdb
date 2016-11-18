@@ -11,11 +11,7 @@
 [v _eecpymem eecpymem `(v  1 e 1 0 ]
 "39
 [v _memcpyee memcpyee `(v  1 e 1 0 ]
-"58 /Users/limadmarlon/MPLABXProjects/UserModule-C.X/main.c
-[v _IO_setup IO_setup `(v  1 e 1 0 ]
-"66
-[v _SPI_setup_master SPI_setup_master `(v  1 e 1 0 ]
-"92
+"92 /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-C.X/main.c
 [v _SPI_send SPI_send `(v  1 e 1 0 ]
 "110
 [v _SPI_sendString SPI_sendString `(v  1 e 1 0 ]
@@ -27,6 +23,20 @@
 [v _ManagerNormalButton ManagerNormalButton `(v  1 e 1 0 ]
 "233
 [v _buttonINT buttonINT `II(v  1 e 1 0 ]
+"273
+[v _overflow overflow `(v  1 e 1 0 ]
+"278
+[v _tx_serial tx_serial `(v  1 e 1 0 ]
+"283
+[v _rx_serial rx_serial `(v  1 e 1 0 ]
+"292
+[v _new_at_com new_at_com `(v  1 e 1 0 ]
+"298
+[v _wait_ok wait_ok `(v  1 e 1 0 ]
+"315
+[v _connect_wifi connect_wifi `(v  1 e 1 0 ]
+"367
+[v _usartInit usartInit `(v  1 e 1 0 ]
 "375
 [v _main main `(v  1 e 1 0 ]
 "160 /Applications/microchip/xc8/v1.38/include/pic16f883.h
@@ -131,6 +141,10 @@
 ]
 [u S278 . 1 `S259 1 . 1 0 `S268 1 . 1 0 `S272 1 . 1 0 `S275 1 . 1 0 ]
 [v _RCSTAbits RCSTAbits `VES278  1 e 1 @24 ]
+"1027
+[v _TXREG TXREG `VEuc  1 e 1 @25 ]
+"1033
+[v _RCREG RCREG `VEuc  1 e 1 @26 ]
 "1301
 [v _TRISA TRISA `VEuc  1 e 1 @133 ]
 "1362
@@ -148,6 +162,8 @@
 "1520
 [u S168 . 1 `S160 1 . 1 0 ]
 [v _PIE1bits PIE1bits `VES168  1 e 1 @140 ]
+"1661
+[v _OSCCON OSCCON `VEuc  1 e 1 @143 ]
 "1970
 [v _SSPSTAT SSPSTAT `VEuc  1 e 1 @148 ]
 [s S71 . 1 `uc 1 BF 1 0 :1:0 
@@ -195,7 +211,7 @@
 [v _SSPSTATbits SSPSTATbits `VES111  1 e 1 @148 ]
 "2207
 [v _IOCB IOCB `VEuc  1 e 1 @150 ]
-[s S317 . 1 `uc 1 TX9D 1 0 :1:0 
+[s S306 . 1 `uc 1 TX9D 1 0 :1:0 
 `uc 1 TRMT 1 0 :1:1 
 `uc 1 BRGH 1 0 :1:2 
 `uc 1 SENDB 1 0 :1:3 
@@ -205,15 +221,17 @@
 `uc 1 CSRC 1 0 :1:7 
 ]
 "2371
-[s S326 . 1 `uc 1 TXD8 1 0 :1:0 
+[s S315 . 1 `uc 1 TXD8 1 0 :1:0 
 `uc 1 . 1 0 :5:1 
 `uc 1 nTX8 1 0 :1:6 
 ]
-[s S330 . 1 `uc 1 . 1 0 :6:0 
+[s S319 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 TX8_9 1 0 :1:6 
 ]
-[u S333 . 1 `S317 1 . 1 0 `S326 1 . 1 0 `S330 1 . 1 0 ]
-[v _TXSTAbits TXSTAbits `VES333  1 e 1 @152 ]
+[u S322 . 1 `S306 1 . 1 0 `S315 1 . 1 0 `S319 1 . 1 0 ]
+[v _TXSTAbits TXSTAbits `VES322  1 e 1 @152 ]
+"2430
+[v _SPBRG SPBRG `VEuc  1 e 1 @153 ]
 "3158
 [v _ANSEL ANSEL `VEuc  1 e 1 @392 ]
 "3201
@@ -232,7 +250,7 @@
 [v _TRISC7 TRISC7 `VEb  1 e 0 @1087 ]
 "3994
 [v _nRBPU nRBPU `VEb  1 e 0 @1039 ]
-"26 /Users/limadmarlon/MPLABXProjects/UserModule-C.X/main.c
+"26 /Users/limadmarlon/MPLABXProjects/:Users:limadmarlon:MPLABXProjects/UserModule-C.X/main.c
 [v _mCount mCount `ui  1 e 2 0 ]
 "27
 [v _pmCount pmCount `ui  1 e 2 0 ]
@@ -275,17 +293,45 @@
 "375
 [v _main main `(v  1 e 1 0 ]
 {
-"430
+"438
 } 0
-"66
-[v _SPI_setup_master SPI_setup_master `(v  1 e 1 0 ]
+"367
+[v _usartInit usartInit `(v  1 e 1 0 ]
 {
-"79
+"374
 } 0
-"58
-[v _IO_setup IO_setup `(v  1 e 1 0 ]
+"315
+[v _connect_wifi connect_wifi `(v  1 e 1 0 ]
 {
-"64
+"365
+} 0
+"298
+[v _wait_ok wait_ok `(v  1 e 1 0 ]
+{
+"313
+} 0
+"283
+[v _rx_serial rx_serial `(v  1 e 1 0 ]
+{
+"290
+} 0
+"273
+[v _overflow overflow `(v  1 e 1 0 ]
+{
+"276
+} 0
+"292
+[v _new_at_com new_at_com `(v  1 e 1 0 ]
+{
+"296
+} 0
+"278
+[v _tx_serial tx_serial `(v  1 e 1 0 ]
+{
+[v tx_serial@aChar aChar `uc  1 a 1 wreg ]
+[v tx_serial@aChar aChar `uc  1 a 1 wreg ]
+[v tx_serial@aChar aChar `uc  1 a 1 7 ]
+"281
 } 0
 "233
 [v _buttonINT buttonINT `II(v  1 e 1 0 ]
